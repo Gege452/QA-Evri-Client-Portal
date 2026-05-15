@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ portal_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/2c337ba3d8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <header class="top-bar">
+        
+    </header>
+
+    <header class="brand-header">
+        <svg data-v-5840b887="" id="logo" width="222" height="56" viewBox="0 0 111 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo" data-v-ea356b72=""><path d="M108.087 3.88665C108.087 1.68404 106.301 0 104.099 0C101.896 0 100.11 1.68404 100.11 3.88665C100.11 6.08926 101.896 7.7733 104.099 7.7733C106.301 7.7733 108.087 6.08926 108.087 3.88665Z" fill="white"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M85.3335 18.9227L96.5181 31.8481H90.8495L80.1881 19.2977H64.9314V31.8481H60.319V0.203088H81.843C86.4048 0.203088 89.2554 1.06926 91.2323 2.93711C92.833 4.44941 93.6853 6.60135 93.6853 9.42296C93.6853 14.9924 90.0915 18.4381 85.3335 18.9227ZM64.9314 4.06382V15.437H81.9447C84.8575 15.437 86.4061 14.8546 87.4385 13.7718C88.4346 12.7272 88.9221 11.2653 88.9221 9.47377C88.9221 7.7356 88.3747 6.44547 87.3907 5.54159C86.2945 4.53449 84.6779 4.06382 81.8431 4.06382H64.9314Z" fill="white"></path><path d="M0 0.203377V5.19745H2.97802V26.8549H0V31.8476H27.1086V23.4513H21.7452V26.8549H8.81085V18.3673H20.5605V13.6001H8.81085V5.19745H21.7452V8.60102H27.1086V0.203377H0Z" fill="white"></path><path d="M54.742 0.203377L46.0704 22.5337L37.4842 0.203377H29.3686L42.0013 32H45.4661L58.0479 0.203377H54.742Z" fill="white"></path><path d="M110.041 31.0513C108.335 30.1978 107.568 29.4398 107.568 27.5863V10.6788H98.4995V11.4755C100.679 12.932 100.972 13.8334 100.972 15.4697V27.5863C100.972 29.4398 100.205 30.1978 98.4995 31.0513V31.848H110.041V31.0513Z" fill="white"></path></svg>
+    </header>
+
+    <div class="portal-layout">
+        <main class="content">
+            <hr>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="button-grid-single-line">
+            <a href="{{ url_for('login') }}" class="portal-button">
+                <strong>Log into client portal</strong>
+            </a>
+            </div>
+<!-- 
+            <section class="info-card">
+                <p>Good evening,</p>
+                <p class="highlight-name">{{ display_name }}</p>
+            </section>
+
+            <section class="action-panel">
+                <h2>What would you like to do?</h2>
+
+                <div class="button-grid">
+
+                    {% if role == "admin" %}
+
+                        <a href="#" class="portal-button">
+                            <strong>Clients</strong>
+                            <span>Create, view or edit clients</span>
+                        </a>
+
+                        <a href="#" class="portal-button">
+                            <strong>Parcel details</strong>
+                            <span>Track and manage parcels</span>
+                        </a>
+
+                        <a href="#" class="portal-button">
+                            <strong>Enquiries</strong>
+                            <span>Resolve and manage enquiries</span>
+                        </a>
+
+                        <a href="#" class="portal-button">
+                            <strong>Account information</strong>
+                            <span>Manage your account information</span>
+                        </a>
+
+                    {% else %}
+
+                        <a href="#" class="portal-button">
+                            <strong>Create delivery label</strong>
+                            <span>Create a new label for your parcel</span>
+                        </a>
+
+                        <a href="#" class="portal-button">
+                            <strong>Parcel details</strong>
+                            <span>Track and manage parcels</span>
+                        </a>
+
+                        <a href="#" class="portal-button">
+                            <strong>Enquiries</strong>
+                            <span>Create and manage enquiries</span>
+                        </a>
+
+                        <a href="#" class="portal-button">
+                            <strong>Account information</strong>
+                            <span>Manage your account information</span>
+                        </a>
+
+                    {% endif %}
+
+                </div>
+            </section> -->
+
+        </main>
+
+    </div>
+
+</body>
+</html>
