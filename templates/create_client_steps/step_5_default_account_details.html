@@ -1,0 +1,93 @@
+<h2 class="wizard-heading">Default</h2>
+
+<div class="default-account-details">
+
+    <div class="default-summary-grid">
+
+        <div class="confirm-item">
+            <strong>Client name</strong>
+            <span>{{ created_client.client_name }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Client ID</strong>
+            <span>{{ created_client.id }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Short name</strong>
+            <span>{{ created_client.short_name }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Status</strong>
+            <span>{{ created_client.status }}</span>
+        </div>
+
+    </div>
+
+    <div class="default-login-row">
+        <strong>Email address</strong>
+        <span>{{ created_user.email }}</span>
+    </div>
+
+    <div class="default-login-row">
+        <strong>Temporary password</strong>
+        <input
+            type="password"
+            id="temporary-password"
+            value="{{ temporary_password }}"
+            readonly
+        >
+
+        <button type="button" class="small-secondary-button" onclick="toggleTemporaryPassword()">
+            Show password
+        </button>
+    </div>
+
+    <div class="alert alert-success">
+        <i class="fa-regular fa-circle-check"></i>
+        Successfully created the client
+    </div>
+
+    <div class="default-actions">
+        <button type="button" class="btn-secondary" onclick="copyClientInformation()">
+            Copy client information to clipboard
+        </button>
+        <a href="{{ mailto_link }}" class="btn-secondary">
+            Email client
+        </a>
+        <a href="{{ url_for('admin_clients') }}" class="btn-primary">
+            Return to Clients
+        </a>
+    </div>
+
+</div>
+
+<script>
+    function copyClientInformation() {
+        const clientInfo = `Client name: {{ created_client.client_name }}
+            Client ID: {{ created_client.id }}
+            Short name: {{ created_client.short_name }}
+            Status: {{ created_client.status }}
+            Email address: {{ created_user.email }}
+            Temporary password: {{ temporary_password }}`;
+
+        navigator.clipboard.writeText(clientInfo)
+            .then(() => alert("Client information copied to clipboard."))
+            .catch(() => alert("Unable to copy client information."));
+    }
+
+    function toggleTemporaryPassword() {
+        const passwordInput = document.getElementById("temporary-password");
+        const button = event.target;
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            button.textContent = "Hide password";
+        } else {
+            passwordInput.type = "password";
+            button.textContent = "Show password";
+        }
+    }
+</script>

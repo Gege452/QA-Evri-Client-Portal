@@ -1,0 +1,67 @@
+<h2 class="wizard-heading">Settings</h2>
+
+<form method="POST" action="{{ url_for('admin_create_client', step=3) }}" class="wizard-form">
+
+    <div class="wizard-form-row">
+        <label for="short_name">Short Name*</label>
+        <input
+            type="text"
+            id="short_name"
+            name="short_name"
+            value="{{ form_data.get('short_name', '') }}"
+            maxlength="20"
+            required
+        >
+    </div>
+
+    <div class="wizard-form-row">
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+            <option value="Pending" {% if form_data.get('status', 'Pending') == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Active" {% if form_data.get('status') == 'Active' %}selected{% endif %}>Active</option>
+            <option value="Inactive" {% if form_data.get('status') == 'Inactive' %}selected{% endif %}>Inactive</option>
+        </select>
+    </div>
+
+    <div class="wizard-form-row toggle-row">
+        <label for="allow_stop_and_return">Allow Stop and Return</label>
+
+         <div class="toggle-wrapper">
+            <label class="switch">
+                <input
+                    type="checkbox"
+                    id="allow_stop_and_return"
+                    name="allow_stop_and_return"
+                    value="yes"
+                    {% if form_data.get('allow_stop_and_return') %}checked{% endif %}
+                >
+                <span class="slider"></span>
+            </label>
+
+            <span id="allow-stop-return-text" class="toggle-text">
+                {% if form_data.get('allow_stop_and_return') %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <div class="wizard-actions">
+        <a href="{{ url_for('admin_create_client', step=2) }}" class="btn-secondary">Back</a>
+        <button type="submit" class="btn-primary">Save and Continue</button>
+    </div>
+
+</form>
+
+<script>
+    const stopReturnToggle = document.getElementById("allow_stop_and_return");
+    const stopReturnText = document.getElementById("allow-stop-return-text");
+
+    if (stopReturnToggle && stopReturnText) {
+        stopReturnToggle.addEventListener("change", function () {
+            stopReturnText.textContent = this.checked ? "Yes" : "No";
+        });
+    }
+</script>

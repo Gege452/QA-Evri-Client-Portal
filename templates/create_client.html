@@ -1,0 +1,51 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+
+<div class="breadcrumb">
+    <a href="{{ url_for('admin_home') }}">Home</a>
+    <span>&gt;</span>
+    <span>Create a new client</span>
+</div>
+
+<hr class="page-divider">
+
+<h1 class="page-title">Create a new client</h1>
+
+<hr class="page-divider">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-container">
+            {% for category, message_text in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message_text }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class="client-wizard-layout">
+
+    {% include "create_client_steps/step_nav.html" %}
+
+    <div class="client-wizard-content">
+
+        {% if step == 1 %}
+            {% include "create_client_steps/step_1_client_details.html" %}
+        {% elif step == 2 %}
+            {% include "create_client_steps/step_2_business_address.html" %}
+        {% elif step == 3 %}
+            {% include "create_client_steps/step_3_settings.html" %}
+        {% elif step == 4 %}
+            {% include "create_client_steps/step_4_confirm.html" %}
+        {% elif step == 5 %}
+            {% include "create_client_steps/step_5_default_account_details.html" %}
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

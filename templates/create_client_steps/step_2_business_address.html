@@ -1,0 +1,79 @@
+<h2 class="wizard-heading">Business Address</h2>
+
+<form method="POST" action="{{ url_for('admin_create_client', step=2) }}" class="wizard-form">
+
+    <div class="wizard-form-row">
+        <label for="address_line_1">Address line 1*</label>
+        <input
+            type="text"
+            id="address_line_1"
+            name="address_line_1"
+            value="{{ form_data.get('address_line_1', '') }}"
+            maxlength="120"
+            required
+        >
+    </div>
+
+    <div class="wizard-form-row">
+        <label for="address_line_2">Address line 2</label>
+        <input
+            type="text"
+            id="address_line_2"
+            name="address_line_2"
+            value="{{ form_data.get('address_line_2', '') }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="wizard-form-row">
+        <label for="address_line_3">Address line 3</label>
+        <input
+            type="text"
+            id="address_line_3"
+            name="address_line_3"
+            value="{{ form_data.get('address_line_3', '') }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="wizard-form-row">
+        <label for="address_line_4">Address line 4</label>
+        <input
+            type="text"
+            id="address_line_4"
+            name="address_line_4"
+            value="{{ form_data.get('address_line_4', '') }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="wizard-form-row">
+        <label for="postcode">Post code*</label>
+        <input
+            type="text"
+            id="postcode"
+            name="postcode"
+            value="{{ form_data.get('postcode', '') }}"
+            maxlength="20"
+            required
+        >
+    </div>
+
+    <div class="wizard-form-row">
+        <label for="country">Country*</label>
+        <input
+            type="text"
+            id="country"
+            name="country"
+            value="{{ form_data.get('country', '') }}"
+            maxlength="80"
+            required
+        >
+    </div>
+
+    <div class="wizard-actions">
+        <a href="{{ url_for('admin_create_client', step=1) }}" class="btn-secondary">Back</a>
+        <button type="submit" class="btn-primary">Save and Continue</button>
+    </div>
+
+</form>

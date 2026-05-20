@@ -1,0 +1,79 @@
+<h2 class="wizard-heading">Confirm</h2>
+
+<form method="POST" action="{{ url_for('admin_create_client', step=4) }}" class="wizard-form">
+
+    <div class="confirm-summary-grid">
+
+        <div class="confirm-item">
+            <strong>Client name</strong>
+            <span>{{ form_data.get('client_name', '') }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Phone<br>Number</strong>
+            <span>{{ form_data.get('phone_number', '') }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Short name</strong>
+            <span>{{ form_data.get('short_name', '') }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Status</strong>
+            <span>{{ form_data.get('status', '') }}</span>
+        </div>
+
+        <div class="confirm-item">
+            <strong>Allow Stop<br>and Return</strong>
+            <span>
+                {% if form_data.get('allow_stop_and_return') %}
+                    True
+                {% else %}
+                    False
+                {% endif %}
+            </span>
+        </div>
+
+    </div>
+
+    <div class="confirm-address-box">
+
+        <div class="confirm-address-row">
+            <strong>Address line 1</strong>
+            <span>{{ form_data.get('address_line_1', '') }}</span>
+        </div>
+
+        <div class="confirm-address-row">
+            <strong>Address line 2</strong>
+            <span>{{ form_data.get('address_line_2', '') }}</span>
+        </div>
+
+        <div class="confirm-address-row">
+            <strong>Address line 3</strong>
+            <span>{{ form_data.get('address_line_3', '') }}</span>
+        </div>
+
+        <div class="confirm-address-row">
+            <strong>Address line 4</strong>
+            <span>{{ form_data.get('address_line_4', '') }}</span>
+        </div>
+
+        <div class="confirm-address-row">
+            <strong>Post code</strong>
+            <span>{{ form_data.get('postcode', '') }}</span>
+        </div>
+
+        <div class="confirm-address-row">
+            <strong>Country</strong>
+            <span>{{ form_data.get('country', '') }}</span>
+        </div>
+
+    </div>
+
+    <div class="wizard-actions">
+        <a href="{{ url_for('admin_create_client', step=3) }}" class="btn-secondary">Back</a>
+        <button type="submit" class="btn-primary">Create Client</button>
+    </div>
+
+</form>

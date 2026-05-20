@@ -1,0 +1,67 @@
+<div class="breadcrumb">
+    <a href="{{ url_for('client_home') }}">Home</a>
+    <span><i class="fa-solid fa-angle-right"></i></span>
+    <a href="{{ url_for('client_enquiries') }}">Enquiries</a>
+    <span><i class="fa-solid fa-angle-right"></i></span>
+    <span>Enquiry Form</span>
+</div>
+
+<hr class="page-divider">
+
+<h1 class="page-title">Create a new enquiry</h1>
+
+<hr class="page-divider">
+
+<form method="POST" action="{{ url_for('new_client_enquiry') }}" class="page-form">
+
+    <div class="form-row">
+        <label for="category">Enquiry category*</label>
+        <select id="category" name="category" required>
+            <option value="">Please select</option>
+            {% for category in categories %}
+                <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>
+                    {{ category }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="tracking_number">Tracking number / parcel reference</label>
+        <input
+            type="text"
+            id="tracking_number"
+            name="tracking_number"
+            value="{{ tracking_number }}"
+            maxlength="50"
+        >
+    </div>
+
+    <div class="form-row">
+        <label for="subject">Subject *</label>
+        <input
+            type="text"
+            id="subject"
+            name="subject"
+            value="{{ subject }}"
+            maxlength="150"
+            required
+        >
+    </div>
+
+    <div class="form-row">
+        <label for="message">Message *</label>
+        <textarea
+            id="message"
+            name="message"
+            rows="4"
+            required
+        >{{ message }}</textarea>
+    </div>
+
+    <div class="form-actions">
+        <a href="{{ url_for('client_home') }}" class="btn-secondary">Back</a>
+        <button type="submit" class="btn-primary">Submit</button>
+    </div>
+
+</form>

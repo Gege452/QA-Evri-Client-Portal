@@ -1,0 +1,280 @@
+<div class="breadcrumb">
+    {% if role == "admin" %}
+        <a href="{{ url_for('admin_home') }}">Home</a>
+    {% else %}
+        <a href="{{ url_for('client_home') }}">Home</a>
+    {% endif %}
+    <span>&gt;</span>
+    <span>Account Information</span>
+</div>
+
+<hr class="page-divider">
+
+<h1 class="page-title">Account information</h1>
+
+<hr class="page-divider">
+
+{% if role == "client" %}
+
+    <section class="account-summary-row client-account-summary">
+
+        <div class="account-summary-item">
+            <strong>Client name</strong>
+            <span>{{ client.client_name }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Client ID</strong>
+            <span>{{ client.id }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Short name</strong>
+            <span>{{ client.short_name }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Account Manager</strong>
+            <span>{{ client.account_manager }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Status</strong>
+            <span>{{ client.status }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Phone<br>Number</strong>
+            <span>{{ client.phone_number or "N/A" }}</span>
+        </div>
+
+        <div class="account-summary-action">
+            <a href="#" class="btn-secondary account-reset-button">
+                Reset Password
+            </a>
+        </div>
+
+    </section>
+
+    <form method="POST" action="{{ url_for('client_account') }}" class="account-form">
+
+        <h2 class="section-heading">Email address</h2>
+
+        <div class="account-form-row">
+            <label for="current_email">Email address</label>
+            <input
+                type="email"
+                id="current_email"
+                value="{{ user.email }}"
+                readonly
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="new_email">New Email address</label>
+            <input
+                type="email"
+                id="new_email"
+                name="new_email"
+                maxlength="120"
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="confirm_email">Confirm Email address</label>
+            <input
+                type="email"
+                id="confirm_email"
+                name="confirm_email"
+                maxlength="120"
+            >
+        </div>
+
+        <h2 class="section-heading">Phone number</h2>
+
+        <div class="account-form-row">
+            <label for="current_phone_number">Phone Number</label>
+            <input
+                type="text"
+                id="current_phone_number"
+                value="{{ client.phone_number or '' }}"
+                readonly
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="new_phone_number">New Phone Number</label>
+            <input
+                type="text"
+                id="new_phone_number"
+                name="new_phone_number"
+                maxlength="30"
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="confirm_phone_number">Confirm Phone Number</label>
+            <input
+                type="text"
+                id="confirm_phone_number"
+                name="confirm_phone_number"
+                maxlength="30"
+            >
+        </div>
+
+        <h2 class="section-heading">Business Address</h2>
+
+        <div class="account-form-row">
+            <label for="address_line_1">Address line 1*</label>
+            <input
+                type="text"
+                id="address_line_1"
+                name="address_line_1"
+                value="{{ client.address_line_1 or '' }}"
+                maxlength="120"
+                required
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="address_line_2">Address line 2</label>
+            <input
+                type="text"
+                id="address_line_2"
+                name="address_line_2"
+                value="{{ client.address_line_2 or '' }}"
+                maxlength="120"
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="address_line_3">Address line 3</label>
+            <input
+                type="text"
+                id="address_line_3"
+                name="address_line_3"
+                value="{{ client.address_line_3 or '' }}"
+                maxlength="120"
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="address_line_4">Address line 4</label>
+            <input
+                type="text"
+                id="address_line_4"
+                name="address_line_4"
+                value="{{ client.address_line_4 or '' }}"
+                maxlength="120"
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="postcode">Post code*</label>
+            <input
+                type="text"
+                id="postcode"
+                name="postcode"
+                value="{{ client.postcode or '' }}"
+                maxlength="20"
+                required
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="country">Country*</label>
+            <input
+                type="text"
+                id="country"
+                name="country"
+                value="{{ client.country or '' }}"
+                maxlength="80"
+                required
+            >
+        </div>
+
+        <div class="account-actions">
+            <a href="{{ url_for('client_home') }}" class="btn-secondary">Back</a>
+            <button type="submit" class="btn-primary">Save</button>
+        </div>
+
+    </form>
+
+{% else %}
+
+    <section class="account-summary-row admin-account-summary">
+
+        <div class="account-summary-item">
+            <strong>Display name</strong>
+            <span>{{ user.display_name }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Role</strong>
+            <span>{{ user.role|capitalize }}</span>
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Status</strong>
+            {% if user.is_active %}
+                <span>Active</span>
+            {% else %}
+                <span>Inactive</span>
+            {% endif %}
+        </div>
+
+        <div class="account-summary-item">
+            <strong>Department</strong>
+            <span>{{ department }}</span>
+        </div>
+
+        <div class="account-summary-action">
+            <a href="#" class="btn-secondary account-reset-button">
+                Reset Password
+            </a>
+        </div>
+
+    </section>
+
+    <h2 class="section-heading">Email address</h2>
+
+    <form method="POST" action="{{ url_for('admin_account') }}" class="account-form">
+
+        <div class="account-form-row">
+            <label for="current_email">Email address</label>
+            <input
+                type="email"
+                id="current_email"
+                value="{{ user.email }}"
+                readonly
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="new_email">New Email address</label>
+            <input
+                type="email"
+                id="new_email"
+                name="new_email"
+                maxlength="120"
+            >
+        </div>
+
+        <div class="account-form-row">
+            <label for="confirm_email">Confirm Email address</label>
+            <input
+                type="email"
+                id="confirm_email"
+                name="confirm_email"
+                maxlength="120"
+            >
+        </div>
+
+        <div class="account-actions">
+            <a href="{{ url_for('admin_home') }}" class="btn-secondary">Back</a>
+            <button type="submit" class="btn-primary">Save</button>
+        </div>
+
+    </form>
+
+{% endif %}

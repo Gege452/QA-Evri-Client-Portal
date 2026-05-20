@@ -1,0 +1,207 @@
+<div class="breadcrumb">
+    {% if role == "admin" %}
+        <a href="{{ url_for('admin_home') }}">Home</a>
+        <span>&gt;</span>
+        <a href="{{ url_for('admin_enquiries') }}">Enquiries</a>
+    {% else %}
+        <a href="{{ url_for('client_home') }}">Home</a>
+        <span>&gt;</span>
+        <a href="{{ url_for('client_enquiries') }}">Enquiries</a>
+    {% endif %}
+    <span>&gt;</span>
+    <span>{{ enquiry_number }}</span>
+</div>
+
+<hr class="page-divider">
+
+<div class="enquiry-title-row">
+    <h1 class="page-title">{{ enquiry.subject }}</h1>
+
+    <span class="status-badge status-{{ enquiry.status|lower|replace(' ', '-') }}">
+        {{ enquiry.status }}
+    </span>
+</div>
+
+<hr class="page-divider">
+
+<section class="enquiry-detail-box">
+
+    {% if role == "admin" %}
+        <form method="POST" class="admin-ticket-form">
+            <input type="hidden" name="action" value="update_enquiry">
+
+            <div class="readonly-row">
+                <label for="category">Enquiry category</label>
+                <select id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if enquiry.category == category %}selected{% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="readonly-row">
+                <label for="tracking_number">Tracking number / parcel reference</label>
+                <input
+                    type="text"
+                    id="tracking_number"
+                    name="tracking_number"
+                    value="{{ enquiry.tracking_number or '' }}"
+                    maxlength="50"
+                >
+            </div>
+
+            <div class="readonly-row">
+                <label for="subject">Subject</label>
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value="{{ enquiry.subject }}"
+                    maxlength="150"
+                    required
+                >
+            </div>
+
+            <div class="readonly-row">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required>{{ enquiry.message }}</textarea>
+            </div>
+
+            <div class="readonly-row">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="New" {% if enquiry.status == "New" %}selected{% endif %}>New</option>
+                    <option value="Work in Progress" {% if enquiry.status == "Work in Progress" %}selected{% endif %}>Work in Progress</option>
+                    <option value="On Hold" {% if enquiry.status == "On Hold" %}selected{% endif %}>On Hold</option>
+                    <option value="Closed" {% if enquiry.status == "Closed" %}selected{% endif %}>Closed</option>
+                </select>
+            </div>
+
+            <div class="admin-ticket-actions">
+                <button type="submit" class="small-primary-button">Update enquiry</button>
+            </div>
+        </form>
+
+    {% else %}
+
+        <div class="readonly-row">
+            <label>Enquiry category</label>
+            <input type="text" value="{{ enquiry.category }}" readonly>
+        </div>
+
+        <div class="readonly-row">
+            <label>Tracking number / parcel reference</label>
+            <input type="text" value="{{ enquiry.tracking_number or 'N/A' }}" readonly>
+        </div>
+
+        <div class="readonly-row">
+            <label>Subject</label>
+            <input type="text" value="{{ enquiry.subject }}" readonly>
+        </div>
+
+        <div class="readonly-row">
+            <label>Message</label>
+            <textarea readonly>{{ enquiry.message }}</textarea>
+        </div>
+
+    {% endif %}
+
+</section>
+
+<section class="comments-box">
+
+    {% if enquiry.status != "Closed" %}
+        <form method="POST" class="comment-form">
+            <input type="hidden" name="action" value="add_comment">
+
+            <div class="comment-input-row">
+                <label>
+                    Additional comments
+                    {% if role == "admin" %}
+                        <br>
+                        (Customer Visible)
+                    {% endif %}
+                </label>
+                <textarea name="comment" rows="3" required></textarea>
+            </div>
+
+            <div class="comment-action-row">
+                <button type="submit" class="small-secondary-button">Post</button>
+            </div>
+        </form>
+    {% else %}
+        <div class="closed-message">
+            This enquiry is closed. No further comments can be added.
+        </div>
+    {% endif %}
+
+    <!-- {% if role == "admin" %}
+        <form method="POST" class="status-update-form">
+            <input type="hidden" name="action" value="update_status">
+
+            <label for="status">Update status</label>
+
+            <select name="status" id="status">
+                <option value="New" {% if enquiry.status == "New" %}selected{% endif %}>New</option>
+                <option value="Work in Progress" {% if enquiry.status == "Work in Progress" %}selected{% endif %}>Work in Progress</option>
+                <option value="On Hold" {% if enquiry.status == "On Hold" %}selected{% endif %}>On Hold</option>
+                <option value="Closed" {% if enquiry.status == "Closed" %}selected{% endif %}>Closed</option>
+            </select>
+
+            <button type="submit" class="small-primary-button">Update</button>
+        </form>
+    {% endif %} -->
+
+    {% if role == "client" and enquiry.status != "Closed" %}
+        <form method="POST" class="close-form">
+            <input type="hidden" name="action" value="close_enquiry">
+            <button type="submit" class="small-secondary-button">Close enquiry</button>
+        </form>
+    {% endif %}
+
+    <div class="comment-list">
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comment-card {% if comment.user_id == 1 %}system-comment{% endif %}">
+
+                    <div class="comment-card-header">
+                        <div class="comment-author">
+                            {% if comment.user_id == 1 %}
+                                System
+                            {% else %}
+                                {{ comment.user.display_name }}
+                            {% endif %}
+                        </div>
+
+                        {% if role == "admin" and comment.user_id != 1 %}
+                            <form
+                                method="POST"
+                                action="{{ url_for('admin_delete_enquiry_comment', enquiry_id=enquiry.id, comment_id=comment.id) }}"
+                                onsubmit="return confirm('Are you sure you want to delete this comment?');"
+                            >
+                                <button type="submit" class="delete-comment-button">
+                                    Delete
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    <div class="comment-text">
+                        {{ comment.comment }}
+                    </div>
+
+                    <div class="comment-date">
+                        {{ comment.created_at.strftime("%d/%m/%Y %H:%M") }}
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-comments">No comments have been added yet.</p>
+        {% endif %}
+
+    </div>
+
+</section>

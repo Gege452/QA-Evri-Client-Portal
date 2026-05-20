@@ -1,0 +1,279 @@
+<div class="breadcrumb">
+    <a href="{{ url_for('admin_home') }}">Home</a>
+    <span>&gt;</span>
+    <a href="{{ url_for('admin_clients') }}">Clients</a>
+    <span>&gt;</span>
+    <span>View</span>
+</div>
+
+<hr class="page-divider">
+
+<h1 class="page-title">{{ client.client_name }} (ID: {{ client.id }})</h1>
+
+<hr class="page-divider">
+
+<form method="POST" action="{{ url_for('admin_view_client', client_id=client.id) }}" class="view-client-form">
+
+    <input type="hidden" name="action" value="save_client">
+
+    <h2 class="section-heading">Details</h2>
+
+    <div class="account-form-row">
+        <label for="client_name">Client name</label>
+        <input
+            type="text"
+            id="client_name"
+            name="client_name"
+            value="{{ client.client_name }}"
+            maxlength="120"
+            required
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="short_name">Short name</label>
+        <input
+            type="text"
+            id="short_name"
+            name="short_name"
+            value="{{ client.short_name }}"
+            maxlength="20"
+            required
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+            <option value="Active" {% if client.status == "Active" %}selected{% endif %}>Active</option>
+            <option value="Inactive" {% if client.status == "Inactive" %}selected{% endif %}>Inactive</option>
+            <option value="Pending" {% if client.status == "Pending" %}selected{% endif %}>Pending</option>
+        </select>
+    </div>
+
+    <div class="account-form-row">
+        <label for="account_manager">Account manager</label>
+        <input
+            type="text"
+            id="account_manager"
+            name="account_manager"
+            value="{{ client.account_manager }}"
+            maxlength="100"
+            required
+        >
+    </div>
+
+    <h2 class="section-heading">Permissions</h2>
+
+    <div class="account-form-row toggle-row">
+        <label for="allow_stop_and_return">Allow Stop and Return</label>
+
+        <div class="toggle-wrapper">
+            <label class="switch">
+                <input
+                    type="checkbox"
+                    id="allow_stop_and_return"
+                    name="allow_stop_and_return"
+                    value="yes"
+                    {% if client.allow_stop_and_return %}checked{% endif %}
+                >
+                <span class="slider"></span>
+            </label>
+
+            <span id="allow-stop-return-text" class="toggle-text">
+                {% if client.allow_stop_and_return %}Yes{% else %}No{% endif %}
+            </span>
+        </div>
+    </div>
+
+    <h2 class="section-heading">Email address</h2>
+
+    <div class="account-form-row">
+        <label>Email address</label>
+        <input
+            type="email"
+            value="{{ primary_user.email if primary_user else client.email }}"
+            readonly
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="new_email">New Email address</label>
+        <input
+            type="email"
+            id="new_email"
+            name="new_email"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="confirm_email">Confirm Email address</label>
+        <input
+            type="email"
+            id="confirm_email"
+            name="confirm_email"
+            maxlength="120"
+        >
+    </div>
+
+    <h2 class="section-heading">Phone number</h2>
+
+    <div class="account-form-row">
+        <label>Phone Number</label>
+        <input
+            type="text"
+            value="{{ client.phone_number or '' }}"
+            readonly
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="new_phone_number">New Phone Number</label>
+        <input
+            type="text"
+            id="new_phone_number"
+            name="new_phone_number"
+            maxlength="30"
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="confirm_phone_number">Confirm Phone Number</label>
+        <input
+            type="text"
+            id="confirm_phone_number"
+            name="confirm_phone_number"
+            maxlength="30"
+        >
+    </div>
+
+    <h2 class="section-heading">Business Address</h2>
+
+    <div class="account-form-row">
+        <label for="address_line_1">Address line 1*</label>
+        <input
+            type="text"
+            id="address_line_1"
+            name="address_line_1"
+            value="{{ client.address_line_1 or '' }}"
+            maxlength="120"
+            required
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="address_line_2">Address line 2</label>
+        <input
+            type="text"
+            id="address_line_2"
+            name="address_line_2"
+            value="{{ client.address_line_2 or '' }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="address_line_3">Address line 3</label>
+        <input
+            type="text"
+            id="address_line_3"
+            name="address_line_3"
+            value="{{ client.address_line_3 or '' }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="address_line_4">Address line 4</label>
+        <input
+            type="text"
+            id="address_line_4"
+            name="address_line_4"
+            value="{{ client.address_line_4 or '' }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="postcode">Post code*</label>
+        <input
+            type="text"
+            id="postcode"
+            name="postcode"
+            value="{{ client.postcode or '' }}"
+            maxlength="20"
+            required
+        >
+    </div>
+
+    <div class="account-form-row">
+        <label for="country">Country*</label>
+        <input
+            type="text"
+            id="country"
+            name="country"
+            value="{{ client.country or '' }}"
+            maxlength="80"
+            required
+        >
+    </div>
+
+    <h2 class="section-heading">Security</h2>
+
+    <div class="account-form-row toggle-row">
+        <label for="must_reset_password">Must reset password?</label>
+
+        <div class="toggle-wrapper">
+            <label class="switch">
+                <input
+                    type="checkbox"
+                    id="must_reset_password"
+                    name="must_reset_password"
+                    value="yes"
+                    {% if primary_user and primary_user.must_reset_password %}checked{% endif %}
+                >
+                <span class="slider"></span>
+            </label>
+
+            <span id="must-reset-password-text" class="toggle-text">
+                {% if primary_user and primary_user.must_reset_password %}Yes{% else %}No{% endif %}
+            </span>
+        </div>
+    </div>
+
+    <div class="view-client-actions">
+        <a href="{{ url_for('admin_clients') }}" class="btn-secondary">
+            Back to clients
+        </a>
+
+        <button type="submit" class="btn-primary">
+            Save
+        </button>
+    </div>
+
+</form>
+
+<form
+    id="delete-client-form"
+    method="POST"
+    action="{{ url_for('admin_view_client', client_id=client.id) }}"
+>
+    <input type="hidden" name="action" value="delete_client">
+</form>
+
+<script>
+    function bindToggleText(toggleId, textId) {
+        const toggle = document.getElementById(toggleId);
+        const text = document.getElementById(textId);
+
+        if (toggle && text) {
+            toggle.addEventListener("change", function () {
+                text.textContent = this.checked ? "Yes" : "No";
+            });
+        }
+    }
+
+    bindToggleText("allow_stop_and_return", "allow-stop-return-text");
+    bindToggleText("must_reset_password", "must-reset-password-text");
+</script>

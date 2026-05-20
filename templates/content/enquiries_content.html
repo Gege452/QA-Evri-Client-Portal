@@ -1,0 +1,127 @@
+<div class="breadcrumb">
+    {% if role == "admin" %}
+        <a href="{{ url_for('admin_home') }}">Home</a>
+    {% else %}
+        <a href="{{ url_for('client_home') }}">Home</a>
+    {% endif %}
+    <span>&gt;</span>
+    <span>Enquiries</span>
+</div>
+
+<hr class="page-divider">
+
+<div class="page-heading-row">
+    <h1 class="page-title">Enquiries</h1>
+
+    {% if role == "client" %}
+        <a href="{{ url_for('new_client_enquiry') }}" class="small-primary-button">
+            + Create a new enquiry
+        </a>
+    {% endif %}
+</div>
+
+<hr class="page-divider">
+
+<form method="GET"
+      action="{% if role == 'admin' %}{{ url_for('admin_enquiries') }}{% else %}{{ url_for('client_enquiries') }}{% endif %}"
+      class="search-form">
+
+    <label class="search-label">Search Enquiries</label>
+
+    <div class="search-row">
+        <select name="search_by" class="search-select">
+            <option value="enquiry_number" {% if search_by == "enquiry_number" %}selected{% endif %}>
+                Enquiry Number
+            </option>
+
+            {% if role == "admin" %}
+                <option value="client_name" {% if search_by == "client_name" %}selected{% endif %}>
+                    Client Name
+                </option>
+            {% endif %}
+
+            <option value="subject" {% if search_by == "subject" %}selected{% endif %}>
+                Subject
+            </option>
+
+            <option value="status" {% if search_by == "status" %}selected{% endif %}>
+                Status
+            </option>
+        </select>
+
+        <input
+            type="text"
+            name="search_value"
+            class="search-input"
+            placeholder="e.g. ENQ000001"
+            value="{{ search_value }}"
+        >
+
+        <button type="submit" class="search-button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+        </button>
+    </div>
+</form>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Enquiry Number</th>
+
+            {% if role == "admin" %}
+                <th>Client Name</th>
+            {% endif %}
+
+            <th>Subject</th>
+            <th>Status</th>
+            <th>View</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% if enquiries %}
+            {% for enquiry in enquiries %}
+                <tr>
+                    <td>ENQ{{ "%06d"|format(enquiry.id) }}</td>
+
+                    {% if role == "admin" %}
+                        <td>{{ enquiry.created_by.display_name }}</td>
+                    {% endif %}
+
+                    <td>{{ enquiry.subject }}</td>
+
+                    <td>
+                        <span class="status-badge status-{{ enquiry.status|lower|replace(' ', '-') }}">
+                            {{ enquiry.status }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if role == "admin" %}
+                            <a href="{{ url_for('admin_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
+                                View
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('client_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
+                                View
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="{% if role == 'admin' %}5{% else %}4{% endif %}" class="empty-table-message">
+                    {% if search_value %}
+                        No enquiries matched your search.
+                    {% elif role == "client" %}
+                        You have not created any enquiries yet.
+                    {% else %}
+                        No client enquiries have been created yet.
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

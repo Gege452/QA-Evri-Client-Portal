@@ -1,0 +1,244 @@
+<div class="breadcrumb">
+    {% if role == "admin" %}
+        <a href="{{ url_for('admin_home') }}">Home</a>
+        <span>&gt;</span>
+        <a href="{{ url_for('admin_parcels') }}">Parcels</a>
+    {% else %}
+        <a href="{{ url_for('client_home') }}">Home</a>
+        <span>&gt;</span>
+        <a href="{{ url_for('client_parcels') }}">Parcels</a>
+    {% endif %}
+    <span>&gt;</span>
+    <span>{{ parcel.tracking_number }}</span>
+</div>
+
+<hr class="page-divider">
+
+<div class="page-heading-row">
+    <h1 class="page-title">{{ parcel.tracking_number }}</h1>
+
+    <span class="status-badge status-{{ parcel.status|lower|replace(' ', '-') }}">
+        {{ parcel.status }}
+    </span>
+</div>
+
+<hr class="page-divider">
+
+<section class="parcel-detail-box">
+
+    {% if role == "admin" %}
+        <div class="parcel-detail-row">
+            <strong>Client</strong>
+            <span>{{ parcel.client.client_name if parcel.client else "N/A" }}</span>
+        </div>
+    {% endif %}
+
+    <div class="parcel-detail-row">
+        <strong>Recipient</strong>
+        <span>{{ parcel.recipient_first_name }} {{ parcel.recipient_last_name }}</span>
+    </div>
+
+    <div class="parcel-detail-row">
+        <strong>Parcel size</strong>
+        <span>{{ parcel.parcel_size }}</span>
+    </div>
+
+    <div class="parcel-detail-row">
+        <strong>Delivery speed</strong>
+        <span>{{ parcel.delivery_speed }}</span>
+    </div>
+
+    <div class="parcel-detail-row">
+        <strong>Parcel contents</strong>
+        <span>{{ parcel.parcel_contents }}</span>
+    </div>
+
+    <div class="parcel-detail-row">
+        <strong>Parcel value</strong>
+        <span>£{{ "%.2f"|format(parcel.parcel_value_gbp) }}</span>
+    </div>
+
+    <div class="parcel-detail-row">
+        <strong>Recipient address</strong>
+        <span>
+            {{ parcel.recipient_address_line_1 }}<br>
+            {% if parcel.recipient_address_line_2 %}{{ parcel.recipient_address_line_2 }}<br>{% endif %}
+            {% if parcel.recipient_address_line_3 %}{{ parcel.recipient_address_line_3 }}<br>{% endif %}
+            {% if parcel.recipient_address_line_4 %}{{ parcel.recipient_address_line_4 }}<br>{% endif %}
+            {{ parcel.recipient_postcode }}<br>
+            {{ parcel.recipient_country }}
+        </span>
+    </div>
+
+</section>
+
+{% if role == "admin" %}
+    <section class="add-track-event-box">
+
+        <h2 class="section-heading">Add tracking event</h2>
+
+        <form method="POST" action="{{ url_for('admin_view_parcel', parcel_id=parcel.id) }}" class="track-event-form">
+
+            <div class="track-event-row">
+                <label for="event_status">Status*</label>
+                <select id="event_status" name="event_status" required>
+                    <option value="">Please select</option>
+
+                    {% for status in tracking_statuses %}
+                        <option value="{{ status }}">
+                            {{ status }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="track-event-row">
+                <label for="event_location">Location*</label>
+                <input
+                    type="text"
+                    id="event_location"
+                    name="event_location"
+                    placeholder="e.g. National Hub"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="track-event-row">
+                <label for="event_description">Description*</label>
+                <textarea
+                    id="event_description"
+                    name="event_description"
+                    rows="3"
+                    placeholder="e.g. Parcel processed at hub."
+                    maxlength="255"
+                    required
+                ></textarea>
+            </div>
+
+            <div class="track-event-row toggle-row">
+                <label for="visible_to_client">Visible to client?</label>
+
+                <div class="toggle-wrapper">
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            id="visible_to_client"
+                            name="visible_to_client"
+                            value="yes"
+                            checked
+                        >
+                        <span class="slider"></span>
+                    </label>
+
+                    <span id="visible-to-client-text" class="toggle-text">Yes</span>
+                </div>
+            </div>
+
+            <div class="track-event-actions">
+                <button type="submit" class="btn-primary">Add tracking event</button>
+            </div>
+
+        </form>
+
+    </section>
+
+    <script>
+        const visibleToggle = document.getElementById("visible_to_client");
+        const visibleText = document.getElementById("visible-to-client-text");
+
+        if (visibleToggle && visibleText) {
+            visibleToggle.addEventListener("change", function () {
+                visibleText.textContent = this.checked ? "Yes" : "No";
+            });
+        }
+    </script>
+{% endif %}
+
+<h2 class="section-heading">Tracking events</h2>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Location</th>
+            <th>Description</th>
+
+            {% if role == "admin" %}
+                <th>Visible to client</th>
+            {% endif %}
+
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    
+    <tbody>
+        {% if track_events %}
+            {% for event in track_events %}
+                <tr>
+                    <td>
+                        <span class="status-badge status-{{ event.event_status|lower|replace(' ', '-') }}">
+                            {{ event.event_status }}
+                        </span>
+                    </td>
+
+                    <td>{{ event.event_location }}</td>
+                    <td>{{ event.event_description }}</td>
+
+                    {% if role == "admin" %}
+                        <td>
+                            {% if event.visible_to_client %}
+                                Yes
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    {% endif %}
+
+                    <td>{{ event.created_at.strftime("%d/%m/%Y %H:%M") }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="{% if role == 'admin' %}5{% else %}4{% endif %}" class="empty-table-message">
+                    No tracking events found.
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<div class="account-actions">
+    {% if role == "admin" %}
+        <a href="{{ url_for('admin_parcels') }}" class="btn-secondary">Back</a>
+    {% else %}
+        <a href="{{ url_for('client_parcels') }}" class="btn-secondary">Back</a>
+    {% endif %}
+</div>
+
+<script>
+    const statusDescriptions = {
+        "In Transit": "Your parcel is currently moving through the delivery network.",
+        "Out for Delivery": "Your parcel is out for delivery and should arrive soon.",
+        "Delivered": "Your parcel has been delivered successfully.",
+        "Delayed": "Sorry, we are expecting a delay with the delivery of this parcel.",
+        "Stop and return": "This parcel is being returned to the sender.",
+        "Cancelled": "This parcel has been cancelled and will not continue through the delivery network."
+    };
+
+    const statusSelect = document.getElementById("event_status");
+    const descriptionBox = document.getElementById("event_description");
+
+    if (statusSelect && descriptionBox) {
+        statusSelect.addEventListener("change", function () {
+            const selectedStatus = this.value;
+
+            if (statusDescriptions[selectedStatus]) {
+                descriptionBox.value = statusDescriptions[selectedStatus];
+            } else {
+                descriptionBox.value = "";
+            }
+        });
+    }
+</script>

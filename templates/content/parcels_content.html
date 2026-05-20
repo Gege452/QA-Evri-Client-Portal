@@ -1,0 +1,136 @@
+<div class="breadcrumb">
+    {% if role == "admin" %}
+        <a href="{{ url_for('admin_home') }}">Home</a>
+    {% else %}
+        <a href="{{ url_for('client_home') }}">Home</a>
+    {% endif %}
+    <span>&gt;</span>
+    <span>Parcels</span>
+</div>
+
+<hr class="page-divider">
+
+<h1 class="page-title">
+    {% if role == "admin" %}
+        Parcels
+    {% else %}
+        Your parcels
+    {% endif %}
+</h1>
+
+<hr class="page-divider">
+
+<form method="GET"
+      action="{% if role == 'admin' %}{{ url_for('admin_parcels') }}{% else %}{{ url_for('client_parcels') }}{% endif %}"
+      class="search-form">
+
+    <label class="search-label">Search parcels:</label>
+
+    <div class="search-row">
+        <select name="search_by" class="search-select">
+            <option value="tracking_number" {% if search_by == "tracking_number" %}selected{% endif %}>
+                Tracking Number
+            </option>
+
+            <option value="recipient_name" {% if search_by == "recipient_name" %}selected{% endif %}>
+                Recipient Name
+            </option>
+
+            <option value="recipient_postcode" {% if search_by == "recipient_postcode" %}selected{% endif %}>
+                Recipient Postcode
+            </option>
+
+            {% if role == "admin" %}
+                <option value="client_name" {% if search_by == "client_name" %}selected{% endif %}>
+                    Client Name
+                </option>
+            {% endif %}
+        </select>
+
+        <input
+            type="text"
+            name="search_value"
+            class="search-input"
+            placeholder="e.g. H123456789123456"
+            value="{{ search_value }}"
+        >
+
+        <button type="submit" class="search-button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+        </button>
+    </div>
+</form>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Tracking Number</th>
+
+            {% if role == "admin" %}
+                <th>Client Name</th>
+            {% endif %}
+
+            <th>Recipient</th>
+            <th>Last status</th>
+            <th>Updated</th>
+            <th>Created</th>
+            <th>View</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% if parcels %}
+            {% for parcel in parcels %}
+                <tr>
+                    <td>{{ parcel.tracking_number }}</td>
+
+                    {% if role == "admin" %}
+                        <td>
+                            {% if parcel.client %}
+                                {{ parcel.client.client_name }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    {% endif %}
+
+                    <td>{{ parcel.recipient_first_name }} {{ parcel.recipient_last_name }}</td>
+
+                    <td>
+                        <span class="status-badge status-{{ parcel.status|lower|replace(' ', '-') }}">
+                            {{ parcel.status }}
+                        </span>
+                    </td>
+
+                    <td>{{ parcel.updated_at.strftime("%d/%m/%Y") }}</td>
+                    <td>{{ parcel.created_at.strftime("%d/%m/%Y") }}</td>
+
+                    <td>
+                        {% if role == "admin" %}
+                            <a href="{{ url_for('admin_view_parcel', parcel_id=parcel.id) }}" class="view-button">
+                                View
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('client_view_parcel', parcel_id=parcel.id) }}" class="view-button">
+                                View
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="{% if role == 'admin' %}7{% else %}6{% endif %}" class="empty-table-message">
+                    {% if search_value %}
+                        No parcels matched your search.
+                    {% elif role == "admin" %}
+                        No parcels have been created yet.
+                    {% else %}
+                        You have not created any parcels yet.
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

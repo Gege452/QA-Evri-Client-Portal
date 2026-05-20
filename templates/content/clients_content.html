@@ -1,0 +1,96 @@
+<div class="breadcrumb">
+    <a href="{{ url_for('admin_home') }}">Home</a>
+    <span>&gt;</span>
+    <span>Clients</span>
+</div>
+
+<hr class="page-divider">
+
+<div class="page-heading-row">
+    <h1 class="page-title">Clients</h1>
+    <a href="{{ url_for('admin_create_client', step=1) }}" class="small-primary-button">+ Create a new client</a>
+</div>
+
+<hr class="page-divider">
+
+<form method="GET" action="{{ url_for('admin_clients') }}" class="search-form">
+
+    <label class="search-label">Search client by:</label>
+
+    <div class="search-row">
+        <select name="search_by" class="search-select">
+            <option value="client_id" {% if search_by == "client_id" %}selected{% endif %}>
+                Client ID
+            </option>
+
+            <option value="client_name" {% if search_by == "client_name" %}selected{% endif %}>
+                Client Name
+            </option>
+
+            <option value="short_name" {% if search_by == "short_name" %}selected{% endif %}>
+                Short Name
+            </option>
+
+            <option value="status" {% if search_by == "status" %}selected{% endif %}>
+                Status
+            </option>
+        </select>
+
+        <input
+            type="text"
+            name="search_value"
+            class="search-input"
+            placeholder="e.g. ABC Company"
+            value="{{ search_value }}"
+        >
+
+        <button type="submit" class="search-button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+        </button>
+    </div>
+</form>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Client Name</th>
+            <th>Client ID</th>
+            <th>Short name</th>
+            <th>Status</th>
+            <th>Account manager</th>
+            <th>View</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% if clients %}
+            {% for client in clients %}
+                <tr>
+                    <td>{{ client.client_name }}</td>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.short_name }}</td>
+                    <td>
+                        <span class="status-badge status-{{ client.status|lower|replace(' ', '-') }}">
+                            {{ client.status }}
+                        </span>
+                    </td>
+                    <td>{{ client.account_manager }}</td>
+                    <td>
+                        <a href="{{ url_for('admin_view_client', client_id=client.id) }}" class="view-button">View</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" class="empty-table-message">
+                    {% if search_value %}
+                        No clients matched your search.
+                    {% else %}
+                        No clients have been created yet.
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

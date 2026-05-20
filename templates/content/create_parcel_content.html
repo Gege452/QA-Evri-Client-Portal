@@ -1,0 +1,222 @@
+<div class="breadcrumb">
+    <a href="{{ url_for('client_home') }}">Home</a>
+    <span>&gt;</span>
+    <span>Create a parcel</span>
+</div>
+
+<hr class="page-divider">
+
+<h1 class="page-title">Create a new parcel</h1>
+
+<hr class="page-divider">
+
+<form method="POST" action="{{ url_for('client_create_parcel') }}" class="parcel-form">
+
+    <div class="parcel-form-row">
+        <label for="parcel_size">Parcel Size*</label>
+        <select id="parcel_size" name="parcel_size" required>
+            <option value="">Please select</option>
+            {% for size in parcel_sizes %}
+                <option value="{{ size }}" {% if form_data.get('parcel_size') == size %}selected{% endif %}>
+                    {{ size }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="parcel-info-row">
+        <div class="parcel-info-label">Size related<br>information</div>
+
+        <div class="parcel-info-grid">
+            <div>
+                <strong>Postable parcel or large letter</strong><br>
+                Fits through a letterbox.<br>
+                Max size: 35cm (L) x 23cm (W) x 3cm (H)<br>
+                Min weight: 250g
+            </div>
+
+            <div>
+                <strong>Standard parcel</strong><br>
+                Your parcel's length plus circumference must be no more than 245 cm,
+                and no side can be longer than 120 cm.
+            </div>
+        </div>
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="delivery_speed">Delivery speed*</label>
+        <select id="delivery_speed" name="delivery_speed" required>
+            <option value="">Please select</option>
+            {% for speed in delivery_speeds %}
+                <option value="{{ speed }}" {% if form_data.get('delivery_speed') == speed %}selected{% endif %}>
+                    {{ speed }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="parcel-info-row">
+        <div class="parcel-info-label">Delivery information</div>
+
+        <div class="parcel-info-grid">
+            <div>
+                <strong>Standard</strong><br>
+                Our usual great service, delivery in 2 - 4 working days.<br>
+                Choose from ParcelShop or locker drop off or Courier Collection.
+            </div>
+
+            <div>
+                <strong>Next Day</strong><br>
+                £3.20<br>
+                Delivery in 1 working day to most UK destinations.<br>
+                For the best chance of Next Day delivery, drop off your parcel by 12 noon.
+            </div>
+        </div>
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="parcel_contents">Parcel contents*</label>
+        <div class="input-with-count">
+            <input
+                type="text"
+                id="parcel_contents"
+                name="parcel_contents"
+                value="{{ form_data.get('parcel_contents', '') }}"
+                maxlength="32"
+                required
+            >
+            <span id="contents-counter">0 / 32</span>
+        </div>
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="parcel_value_gbp">How much is it<br>worth?*</label>
+        <div class="money-input">
+            <span>£</span>
+            <input
+                type="number"
+                id="parcel_value_gbp"
+                name="parcel_value_gbp"
+                value="{{ form_data.get('parcel_value_gbp', '') }}"
+                min="0"
+                step="0.01"
+                required
+            >
+        </div>
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="recipient_first_name">Recipient first name*</label>
+        <input
+            type="text"
+            id="recipient_first_name"
+            name="recipient_first_name"
+            value="{{ form_data.get('recipient_first_name', '') }}"
+            maxlength="80"
+            required
+        >
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="recipient_last_name">Recipient last name*</label>
+        <input
+            type="text"
+            id="recipient_last_name"
+            name="recipient_last_name"
+            value="{{ form_data.get('recipient_last_name', '') }}"
+            maxlength="80"
+            required
+        >
+    </div>
+
+    <h2 class="parcel-section-heading">What's their address?</h2>
+
+    <div class="parcel-form-row">
+        <label for="address_line_1">Address line 1*</label>
+        <input
+            type="text"
+            id="address_line_1"
+            name="address_line_1"
+            value="{{ form_data.get('address_line_1', '') }}"
+            maxlength="120"
+            required
+        >
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="address_line_2">Address line 2</label>
+        <input
+            type="text"
+            id="address_line_2"
+            name="address_line_2"
+            value="{{ form_data.get('address_line_2', '') }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="address_line_3">Address line 3</label>
+        <input
+            type="text"
+            id="address_line_3"
+            name="address_line_3"
+            value="{{ form_data.get('address_line_3', '') }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="address_line_4">Address line 4</label>
+        <input
+            type="text"
+            id="address_line_4"
+            name="address_line_4"
+            value="{{ form_data.get('address_line_4', '') }}"
+            maxlength="120"
+        >
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="postcode">Post code*</label>
+        <input
+            type="text"
+            id="postcode"
+            name="postcode"
+            value="{{ form_data.get('postcode', '') }}"
+            maxlength="20"
+            required
+        >
+    </div>
+
+    <div class="parcel-form-row">
+        <label for="country">Country*</label>
+        <input
+            type="text"
+            id="country"
+            name="country"
+            value="{{ form_data.get('country', '') }}"
+            maxlength="80"
+            required
+        >
+    </div>
+
+    <div class="parcel-actions">
+        <button type="submit" class="btn-primary">Create parcel</button>
+    </div>
+
+</form>
+
+<script>
+    const contentsInput = document.getElementById("parcel_contents");
+    const contentsCounter = document.getElementById("contents-counter");
+
+    function updateContentsCounter() {
+        const length = contentsInput.value.length;
+        contentsCounter.textContent = `${length} / 32`;
+    }
+
+    if (contentsInput && contentsCounter) {
+        contentsInput.addEventListener("input", updateContentsCounter);
+        updateContentsCounter();
+    }
+</script>
