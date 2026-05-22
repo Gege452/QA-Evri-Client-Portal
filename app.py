@@ -1,4 +1,5 @@
 from functools import wraps
+import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -1926,7 +1927,8 @@ def logout():
 
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     with app.app_context():
         create_database_and_seed_users()
 
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
