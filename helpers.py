@@ -7,6 +7,7 @@ from flask import flash, session, redirect, url_for
 
 from extensions import db
 from models import Enquiry, EnquiryComment, TrackEvent, Client, User, Parcel
+from config import STOP_RETURN_ALLOWED_LATEST_STATUSES, STOP_RETURN_BLOCKED_STATUSES
 
 def generate_temporary_password(length=14):
     """
@@ -366,3 +367,60 @@ def create_parcel_object(tracking_number, client_id, user_id, form_data):
             created_at=now,
             updated_at=now,
         )
+
+def get_latest_track_event(parcel_id):
+    return (
+        TrackEvent.query
+        .filter_by(parcel_id=parcel_id)
+        .order_by(TrackEvent.created_at.desc())
+        .first()
+    )
+
+def can_user_stop_and_return(parcel, user):
+    """
+    Checks whether the user can request Stop and Return for this parcel.
+
+    Rules:
+    - User must be admin OR a client with allow_stop_and_return enabled.
+    - Client users can only stop and return their own parcels.
+    - Latest track event must be In Transit or Delayed.
+    - Parcel must not already have Out for Delivery, Delivered, Stop and return, or Cancelled.
+    """
+
+    if user.role == "admin":
+        has_permission = True
+
+    elif user.role == "client":
+        if user.client_id != parcel.client_id:
+            return False, "You do not have permission to manage this parcel."
+
+        if not parcel.client or not parcel.client.allow_stop_and_return:
+            return False, "Stop and Return is not enabled for this client account."
+
+        has_permission = True
+
+    else:
+        has_permission = False
+
+    if not has_permission:
+        return False, "You do not have permission to request Stop and Return."
+
+    latest_event = get_latest_track_event(parcel.id)
+
+    if not latest_event:
+        return False, "This parcel does not have any tracking events yet."
+
+    if latest_event.event_status not in STOP_RETURN_ALLOWED_LATEST_STATUSES:
+        return False, "Stop and Return is only available when the parcel is In Transit or Delayed."
+
+    existing_blocked_event = (
+        TrackEvent.query
+        .filter(TrackEvent.parcel_id == parcel.id)
+        .filter(TrackEvent.event_status.in_(STOP_RETURN_BLOCKED_STATUSES))
+        .first()
+    )
+
+    if existing_blocked_event:
+        return False, "Stop and Return is no longer available for this parcel."
+
+    return True, ""

@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from datetime import datetime, timezone
 
-from auth_utils import role_required
+from auth_utils import login_required, role_required
 from extensions import db
 from models import User, Client, Parcel, TrackEvent
 from config import PARCEL_SIZES, DELIVERY_SPEEDS
-from helpers import create_parcel_object, generate_tracking_number, create_initial_track_event
+from helpers import can_user_stop_and_return, create_parcel_object, generate_tracking_number, create_initial_track_event
 from validators import validate
 parcel_bp = Blueprint("parcel", __name__)
 
@@ -195,9 +195,10 @@ def admin_parcels():
 @parcel_bp.route("/client/parcel/<int:parcel_id>")
 @role_required("client")
 def client_view_parcel(parcel_id):
-    user = User.query.get_or_404(session["user_id"])
-
     parcel = Parcel.query.get_or_404(parcel_id)
+    
+    user = User.query.get_or_404(session["user_id"])
+    can_stop_return, stop_return_reason = can_user_stop_and_return(parcel, user)
 
     if parcel.client_id != user.client_id:
         flash("You do not have permission to view that parcel.", "error")
@@ -220,6 +221,8 @@ def client_view_parcel(parcel_id):
         page_title="View Parcel",
         email=session.get("email"),
         active_page="parcels",
+        can_stop_return=can_stop_return,
+        stop_return_reason=stop_return_reason
     )
 
 
@@ -227,6 +230,9 @@ def client_view_parcel(parcel_id):
 @role_required("admin")
 def admin_view_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
+
+    user = User.query.get_or_404(session["user_id"])
+    can_stop_return, stop_return_reason = can_user_stop_and_return(parcel, user)
 
     tracking_statuses = [
         "In Transit",
@@ -297,4 +303,46 @@ def admin_view_parcel(parcel_id):
         page_title="View Parcel",
         email=session.get("email"),
         active_page="parcels",
+        can_stop_return=can_stop_return,
+        stop_return_reason=stop_return_reason
     )
+
+@parcel_bp.route("/parcel/<int:parcel_id>/stop-return", methods=["POST"])
+@login_required
+def stop_and_return_parcel(parcel_id):
+    user = User.query.get_or_404(session["user_id"])
+    parcel = Parcel.query.get_or_404(parcel_id)
+
+    allowed, message = can_user_stop_and_return(parcel, user)
+
+    if not allowed:
+        flash(message, "error")
+
+        if user.role == "admin":
+            return redirect(url_for("parcel.admin_view_parcel", parcel_id=parcel.id))
+
+        return redirect(url_for("parcel.client_view_parcel", parcel_id=parcel.id))
+
+    now = datetime.now(timezone.utc)
+
+    stop_return_event = TrackEvent(
+        parcel_id=parcel.id,
+        event_status="Stop and return",
+        event_location="Client Portal" if user.role == "client" else "Admin Portal",
+        event_description="A Stop and Return request has been applied to this parcel.",
+        visible_to_client=True,
+        created_at=now,
+    )
+
+    parcel.status = "Stop and return"
+    parcel.updated_at = now
+
+    db.session.add(stop_return_event)
+    db.session.commit()
+
+    flash("Stop and Return has been applied to this parcel.", "success")
+
+    if user.role == "admin":
+        return redirect(url_for("parcel.admin_view_parcel", parcel_id=parcel.id))
+
+    return redirect(url_for("parcel.client_view_parcel", parcel_id=parcel.id))

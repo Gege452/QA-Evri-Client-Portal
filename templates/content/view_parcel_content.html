@@ -215,6 +215,18 @@
     {% else %}
         <a href="{{ url_for('parcel.client_parcels') }}" class="btn-secondary">Back</a>
     {% endif %}
+
+    {% if can_stop_return %}
+        <form
+            method="POST"
+            action="{{ url_for('parcel.stop_and_return_parcel', parcel_id=parcel.id) }}"
+            onsubmit="return confirm('Are you sure you want to apply Stop and Return to this parcel?');"
+        >
+            <button type="submit" class="btn-secondary">
+                Stop and Return
+            </button>
+        </form>
+    {% endif %}
 </div>
 
 <script>

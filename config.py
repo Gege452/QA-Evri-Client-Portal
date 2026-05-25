@@ -33,3 +33,12 @@ DELIVERY_SPEEDS = [
     "Standard",
     "Next Day",
 ]
+
+STOP_RETURN_ALLOWED_LATEST_STATUSES = ["In Transit", "Delayed"]
+
+STOP_RETURN_BLOCKED_STATUSES = [
+    "Out for Delivery",
+    "Delivered",
+    "Stop and return",
+    "Cancelled",
+]
