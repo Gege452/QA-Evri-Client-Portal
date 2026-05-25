@@ -1,7 +1,7 @@
 <div class="breadcrumb">
-    <a href="{{ url_for('admin_home') }}">Home</a>
+    <a href="{{ url_for('admin.admin_home') }}">Home</a>
     <span>&gt;</span>
-    <a href="{{ url_for('admin_clients') }}">Clients</a>
+    <a href="{{ url_for('admin.admin_clients') }}">Clients</a>
     <span>&gt;</span>
     <span>View</span>
 </div>
@@ -12,7 +12,7 @@
 
 <hr class="page-divider">
 
-<form method="POST" action="{{ url_for('admin_view_client', client_id=client.id) }}" class="view-client-form">
+<form method="POST" action="{{ url_for('admin.admin_view_client', client_id=client.id) }}" class="view-client-form">
 
     <input type="hidden" name="action" value="save_client">
 
@@ -243,7 +243,7 @@
     </div>
 
     <div class="view-client-actions">
-        <a href="{{ url_for('admin_clients') }}" class="btn-secondary">
+        <a href="{{ url_for('admin.admin_clients') }}" class="btn-secondary">
             Back to clients
         </a>
 
@@ -257,7 +257,7 @@
 <form
     id="delete-client-form"
     method="POST"
-    action="{{ url_for('admin_view_client', client_id=client.id) }}"
+    action="{{ url_for('admin.admin_view_client', client_id=client.id) }}"
 >
     <input type="hidden" name="action" value="delete_client">
 </form>

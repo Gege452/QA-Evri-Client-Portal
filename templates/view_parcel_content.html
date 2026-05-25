@@ -1,12 +1,12 @@
 <div class="breadcrumb">
     {% if role == "admin" %}
-        <a href="{{ url_for('admin_home') }}">Home</a>
+        <a href="{{ url_for('admin.admin_home') }}">Home</a>
         <span>&gt;</span>
-        <a href="{{ url_for('admin_parcels') }}">Parcels</a>
+        <a href="{{ url_for('parcel.admin_parcels') }}">Parcels</a>
     {% else %}
-        <a href="{{ url_for('client_home') }}">Home</a>
+        <a href="{{ url_for('client.client_home') }}">Home</a>
         <span>&gt;</span>
-        <a href="{{ url_for('client_parcels') }}">Parcels</a>
+        <a href="{{ url_for('parcel.client_parcels') }}">Parcels</a>
     {% endif %}
     <span>&gt;</span>
     <span>{{ parcel.tracking_number }}</span>
@@ -77,7 +77,7 @@
 
         <h2 class="section-heading">Add tracking event</h2>
 
-        <form method="POST" action="{{ url_for('admin_view_parcel', parcel_id=parcel.id) }}" class="track-event-form">
+        <form method="POST" action="{{ url_for('parcel.admin_view_parcel', parcel_id=parcel.id) }}" class="track-event-form">
 
             <div class="track-event-row">
                 <label for="event_status">Status*</label>
@@ -211,9 +211,9 @@
 
 <div class="account-actions">
     {% if role == "admin" %}
-        <a href="{{ url_for('admin_parcels') }}" class="btn-secondary">Back</a>
+        <a href="{{ url_for('parcel.admin_parcels') }}" class="btn-secondary">Back</a>
     {% else %}
-        <a href="{{ url_for('client_parcels') }}" class="btn-secondary">Back</a>
+        <a href="{{ url_for('parcel.client_parcels') }}" class="btn-secondary">Back</a>
     {% endif %}
 </div>
 

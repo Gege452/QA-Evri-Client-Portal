@@ -1,6 +1,6 @@
 <h2 class="wizard-heading">Business Address</h2>
 
-<form method="POST" action="{{ url_for('admin_create_client', step=2) }}" class="wizard-form">
+<form method="POST" action="{{ url_for('admin.admin_create_client', step=2) }}" class="wizard-form">
 
     <div class="wizard-form-row">
         <label for="address_line_1">Address line 1*</label>
@@ -72,7 +72,7 @@
     </div>
 
     <div class="wizard-actions">
-        <a href="{{ url_for('admin_create_client', step=1) }}" class="btn-secondary">Back</a>
+        <a href="{{ url_for('admin.admin_create_client', step=1) }}" class="btn-secondary">Back</a>
         <button type="submit" class="btn-primary">Save and Continue</button>
     </div>
 

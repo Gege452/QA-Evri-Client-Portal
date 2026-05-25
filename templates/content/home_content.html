@@ -3,7 +3,7 @@
 <hr>
 
 <section class="info-card">
-    <p>Good evening,</p>
+    <p>Hi,</p>
     <p class="highlight-name">{{ display_name }}</p>
 </section>
 
@@ -14,44 +14,44 @@
 
         {% if role == "admin" %}
 
-            <a href="{{ url_for('admin_clients') }}" class="portal-button">
+            <a href="{{ url_for('admin.admin_clients') }}" class="portal-button">
                 <strong>Clients</strong>
                 <span>Create, view or edit clients</span>
             </a>
 
-            <a href="{{ url_for('admin_parcels') }}" class="portal-button">
+            <a href="{{ url_for('parcel.admin_parcels') }}" class="portal-button">
                 <strong>Parcel details</strong>
                 <span>Track and manage parcels</span>
             </a>
 
-            <a href="{{ url_for('admin_enquiries') }}" class="portal-button">
+            <a href="{{ url_for('enquiry.admin_enquiries') }}" class="portal-button">
                 <strong>Enquiries</strong>
                 <span>Resolve and manage enquiries</span>
             </a>
 
-            <a href="{{ url_for('admin_account') }}" class="portal-button">
+            <a href="{{ url_for('admin.admin_account') }}" class="portal-button">
                 <strong>Account information</strong>
                 <span>Manage your account information</span>
             </a>
 
         {% else %}
 
-            <a href="{{ url_for('client_create_parcel') }}" class="portal-button">
+            <a href="{{ url_for('parcel.client_create_parcel') }}" class="portal-button">
                 <strong>Create delivery label</strong>
                 <span>Create a new label for your parcel</span>
             </a>
 
-            <a href="{{ url_for('client_parcels') }}" class="portal-button">
+            <a href="{{ url_for('parcel.client_parcels') }}" class="portal-button">
                 <strong>Parcel details</strong>
                 <span>Track and manage parcels</span>
             </a>
 
-            <a href="{{ url_for('client_enquiries') }}" class="portal-button">
+            <a href="{{ url_for('enquiry.client_enquiries') }}" class="portal-button">
                 <strong>Enquiries</strong>
                 <span>Create and manage enquiries</span>
             </a>
 
-            <a href="{{ url_for('client_account') }}" class="portal-button">
+            <a href="{{ url_for('client.client_account') }}" class="portal-button">
                 <strong>Account information</strong>
                 <span>Manage your account information</span>
             </a>

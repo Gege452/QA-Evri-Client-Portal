@@ -1,5 +1,5 @@
 <div class="breadcrumb">
-    <a href="{{ url_for('client_home') }}">Home</a>
+    <a href="{{ url_for('client.client_home') }}">Home</a>
     <span>&gt;</span>
     <span>Create a parcel</span>
 </div>
@@ -10,7 +10,7 @@
 
 <hr class="page-divider">
 
-<form method="POST" action="{{ url_for('client_create_parcel') }}" class="parcel-form">
+<form method="POST" action="{{ url_for('parcel.client_create_parcel') }}" class="parcel-form">
 
     <div class="parcel-form-row">
         <label for="parcel_size">Parcel Size*</label>

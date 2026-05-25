@@ -1,5 +1,5 @@
 <div class="breadcrumb">
-    <a href="{{ url_for('admin_home') }}">Home</a>
+    <a href="{{ url_for('admin.admin_home') }}">Home</a>
     <span>&gt;</span>
     <span>Clients</span>
 </div>
@@ -8,12 +8,12 @@
 
 <div class="page-heading-row">
     <h1 class="page-title">Clients</h1>
-    <a href="{{ url_for('admin_create_client', step=1) }}" class="small-primary-button">+ Create a new client</a>
+    <a href="{{ url_for('admin.admin_create_client', step=1) }}" class="small-primary-button">+ Create a new client</a>
 </div>
 
 <hr class="page-divider">
 
-<form method="GET" action="{{ url_for('admin_clients') }}" class="search-form">
+<form method="GET" action="{{ url_for('admin.admin_clients') }}" class="search-form">
 
     <label class="search-label">Search client by:</label>
 
@@ -77,7 +77,7 @@
                     </td>
                     <td>{{ client.account_manager }}</td>
                     <td>
-                        <a href="{{ url_for('admin_view_client', client_id=client.id) }}" class="view-button">View</a>
+                        <a href="{{ url_for('admin.admin_view_client', client_id=client.id) }}" class="view-button">View</a>
                     </td>
                 </tr>
             {% endfor %}

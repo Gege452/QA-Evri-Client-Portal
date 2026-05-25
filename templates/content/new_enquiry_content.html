@@ -1,7 +1,7 @@
 <div class="breadcrumb">
-    <a href="{{ url_for('client_home') }}">Home</a>
+    <a href="{{ url_for('client.client_home') }}">Home</a>
     <span><i class="fa-solid fa-angle-right"></i></span>
-    <a href="{{ url_for('client_enquiries') }}">Enquiries</a>
+    <a href="{{ url_for('enquiry.client_enquiries') }}">Enquiries</a>
     <span><i class="fa-solid fa-angle-right"></i></span>
     <span>Enquiry Form</span>
 </div>
@@ -12,7 +12,7 @@
 
 <hr class="page-divider">
 
-<form method="POST" action="{{ url_for('new_client_enquiry') }}" class="page-form">
+<form method="POST" action="{{ url_for('enquiry.new_client_enquiry') }}" class="page-form">
 
     <div class="form-row">
         <label for="category">Enquiry category*</label>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="form-actions">
-        <a href="{{ url_for('client_home') }}" class="btn-secondary">Back</a>
+        <a href="{{ url_for('client.client_home') }}" class="btn-secondary">Back</a>
         <button type="submit" class="btn-primary">Submit</button>
     </div>
 

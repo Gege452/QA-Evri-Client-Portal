@@ -1,8 +1,8 @@
 <div class="breadcrumb">
     {% if role == "admin" %}
-        <a href="{{ url_for('admin_home') }}">Home</a>
+        <a href="{{ url_for('admin.admin_home') }}">Home</a>
     {% else %}
-        <a href="{{ url_for('client_home') }}">Home</a>
+        <a href="{{ url_for('client.client_home') }}">Home</a>
     {% endif %}
     <span>&gt;</span>
     <span>Parcels</span>
@@ -21,7 +21,7 @@
 <hr class="page-divider">
 
 <form method="GET"
-      action="{% if role == 'admin' %}{{ url_for('admin_parcels') }}{% else %}{{ url_for('client_parcels') }}{% endif %}"
+      action="{% if role == 'admin' %}{{ url_for('parcel.admin_parcels') }}{% else %}{{ url_for('parcel.client_parcels') }}{% endif %}"
       class="search-form">
 
     <label class="search-label">Search parcels:</label>
@@ -108,11 +108,11 @@
 
                     <td>
                         {% if role == "admin" %}
-                            <a href="{{ url_for('admin_view_parcel', parcel_id=parcel.id) }}" class="view-button">
+                            <a href="{{ url_for('parcel.admin_view_parcel', parcel_id=parcel.id) }}" class="view-button">
                                 View
                             </a>
                         {% else %}
-                            <a href="{{ url_for('client_view_parcel', parcel_id=parcel.id) }}" class="view-button">
+                            <a href="{{ url_for('parcel.client_view_parcel', parcel_id=parcel.id) }}" class="view-button">
                                 View
                             </a>
                         {% endif %}

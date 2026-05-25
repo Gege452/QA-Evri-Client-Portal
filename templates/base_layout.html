@@ -9,7 +9,7 @@
 <body>
 
      <header class="top-bar">
-        <a href="{{ url_for('logout') }}" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout {{ email }}</a>
+        <a href="{{ url_for('auth.logout') }}" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout {{ email }}</a>
     </header>
 
     <header class="brand-header">
@@ -23,15 +23,15 @@
             <h2>{{ portal_title }}</h2>
 
             {% if role == "admin" %}
-                <a href="{{ url_for('admin_clients') }}" class="{% if active_page == 'clients' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-magnifying-glass nav-item-logo"></i>Clients</a>
-                <a href="{{ url_for('admin_parcels') }}" class="{% if active_page == 'parcels' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-cubes"></i>Parcels</a>
-                <a href="{{ url_for('admin_enquiries') }}" class="{% if active_page == 'enquiries' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-envelopes-bulk"></i>Enquiries</a>
-                <a href="{{ url_for('admin_account') }}" class="{% if active_page == 'account' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-user"></i>Account</a>
+                <a href="{{ url_for('admin.admin_clients') }}" class="{% if active_page == 'clients' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-magnifying-glass nav-item-logo"></i>Clients</a>
+                <a href="{{ url_for('parcel.admin_parcels') }}" class="{% if active_page == 'parcels' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-cubes"></i>Parcels</a>
+                <a href="{{ url_for('enquiry.admin_enquiries') }}" class="{% if active_page == 'enquiries' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-envelopes-bulk"></i>Enquiries</a>
+                <a href="{{ url_for('admin.admin_account') }}" class="{% if active_page == 'account' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-user"></i>Account</a>
             {% else %}
-                <a href="{{ url_for('client_create_parcel') }}" class="{% if active_page == 'create_label' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-barcode"></i>Create parcel</a>
-                <a href="{{ url_for('client_parcels') }}" class="{% if active_page == 'parcels' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-cubes"></i>Parcels</a>
-                <a href="{{ url_for('client_enquiries') }}" class="{% if active_page == 'enquiries' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-envelopes-bulk"></i>Enquiries</a>
-                <a href="{{ url_for('client_account') }}" class="{% if active_page == 'account' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-user"></i>Account</a>
+                <a href="{{ url_for('parcel.client_create_parcel') }}" class="{% if active_page == 'create_label' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-barcode"></i>Create parcel</a>
+                <a href="{{ url_for('parcel.client_parcels') }}" class="{% if active_page == 'parcels' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-cubes"></i>Parcels</a>
+                <a href="{{ url_for('enquiry.client_enquiries') }}" class="{% if active_page == 'enquiries' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-envelopes-bulk"></i>Enquiries</a>
+                <a href="{{ url_for('client.client_account') }}" class="{% if active_page == 'account' %}selected-nav-item{% else %}nav-item{% endif %}"><i class="fa-solid fa-user"></i>Account</a>
             {% endif %}
         </aside>
 

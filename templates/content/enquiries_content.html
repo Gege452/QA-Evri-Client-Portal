@@ -1,8 +1,8 @@
 <div class="breadcrumb">
     {% if role == "admin" %}
-        <a href="{{ url_for('admin_home') }}">Home</a>
+        <a href="{{ url_for('admin.admin_home') }}">Home</a>
     {% else %}
-        <a href="{{ url_for('client_home') }}">Home</a>
+        <a href="{{ url_for('client.client_home') }}">Home</a>
     {% endif %}
     <span>&gt;</span>
     <span>Enquiries</span>
@@ -14,7 +14,7 @@
     <h1 class="page-title">Enquiries</h1>
 
     {% if role == "client" %}
-        <a href="{{ url_for('new_client_enquiry') }}" class="small-primary-button">
+        <a href="{{ url_for('enquiry.new_client_enquiry') }}" class="small-primary-button">
             + Create a new enquiry
         </a>
     {% endif %}
@@ -23,7 +23,7 @@
 <hr class="page-divider">
 
 <form method="GET"
-      action="{% if role == 'admin' %}{{ url_for('admin_enquiries') }}{% else %}{{ url_for('client_enquiries') }}{% endif %}"
+      action="{% if role == 'admin' %}{{ url_for('enquiry.admin_enquiries') }}{% else %}{{ url_for('enquiry.client_enquiries') }}{% endif %}"
       class="search-form">
 
     <label class="search-label">Search Enquiries</label>
@@ -99,11 +99,11 @@
 
                     <td>
                         {% if role == "admin" %}
-                            <a href="{{ url_for('admin_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
+                            <a href="{{ url_for('enquiry.admin_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
                                 View
                             </a>
                         {% else %}
-                            <a href="{{ url_for('client_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
+                            <a href="{{ url_for('enquiry.client_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
                                 View
                             </a>
                         {% endif %}
