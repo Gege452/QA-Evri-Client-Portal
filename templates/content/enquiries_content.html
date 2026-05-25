@@ -101,10 +101,18 @@
                         {% if role == "admin" %}
                             <a href="{{ url_for('enquiry.admin_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
                                 View
+
+                                {% if enquiry_notifications.get(enquiry.id) %}
+                                    <span class="notification-dot"></span>
+                                {% endif %}
                             </a>
                         {% else %}
                             <a href="{{ url_for('enquiry.client_view_enquiry', enquiry_id=enquiry.id) }}" class="view-button">
                                 View
+
+                                {% if enquiry_notifications.get(enquiry.id) %}
+                                    <span class="notification-dot"></span>
+                                {% endif %}
                             </a>
                         {% endif %}
                     </td>

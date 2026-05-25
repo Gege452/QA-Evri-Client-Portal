@@ -476,6 +476,10 @@ hr {
     text-decoration: none;
 }
 
+.notification-wrapper {
+    position: relative;
+}
+
 .notification-dot {
     position: absolute;
     top: -6px;

@@ -5,7 +5,7 @@ from auth_utils import role_required
 from extensions import db
 from models import Enquiry, EnquiryComment, Client, User
 from config import ENQUIRY_CATEGORIES
-from helpers import add_system_comment, create_enquiry_comment_object, create_enquiry_object, format_enquiry_number, update_enquiry, build_enquiry_change_comment
+from helpers import add_system_comment, create_enquiry_comment_object, create_enquiry_object, enquiry_requires_attention, format_enquiry_number, update_enquiry, build_enquiry_change_comment
 from validators import validate
 
 enquiry_bp = Blueprint("enquiry", __name__)
@@ -33,9 +33,15 @@ def client_enquiries():
 
     enquiries = query.order_by(Enquiry.created_at.desc()).all()
 
+    enquiry_notifications = {
+        enquiry.id: enquiry_requires_attention(enquiry, "client")
+        for enquiry in enquiries
+    }
+
     return render_template(
         "enquiries.html",
         enquiries=enquiries,
+        enquiry_notifications=enquiry_notifications,
         role="client",
         portal_title="Client Portal",
         page_title="Enquiries",
@@ -79,9 +85,15 @@ def admin_enquiries():
 
     enquiries = query.order_by(Enquiry.created_at.desc()).all()
 
+    enquiry_notifications = {
+        enquiry.id: enquiry_requires_attention(enquiry, "admin")
+        for enquiry in enquiries
+    }
+
     return render_template(
         "enquiries.html",
         enquiries=enquiries,
+        enquiry_notifications=enquiry_notifications,
         role="admin",
         portal_title="Admin Portal",
         page_title="Enquiries",

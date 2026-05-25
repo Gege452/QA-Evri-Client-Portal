@@ -424,3 +424,31 @@ def can_user_stop_and_return(parcel, user):
         return False, "Stop and Return is no longer available for this parcel."
 
     return True, ""
+
+def enquiry_requires_attention(enquiry, current_user_role):
+    """
+    Returns True when the enquiry needs attention from the current user's role.
+
+    Rules:
+    - Closed enquiries do not show notification dots.
+    - If no real comments exist, admins see a notification for new enquiries.
+    - System comments use user_id = 1 and are ignored.
+    - If latest real comment is from the opposite role, show notification.
+    """
+
+    if enquiry.status == "Closed":
+        return False
+
+    latest_real_comment = (
+        EnquiryComment.query
+        .join(User, EnquiryComment.user_id == User.id)
+        .filter(EnquiryComment.enquiry_id == enquiry.id)
+        .filter(EnquiryComment.user_id != 1)
+        .order_by(EnquiryComment.created_at.desc())
+        .first()
+    )
+
+    if not latest_real_comment:
+        return current_user_role == "admin"
+
+    return latest_real_comment.user.role != current_user_role
