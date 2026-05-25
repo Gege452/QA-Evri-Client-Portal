@@ -22,20 +22,25 @@ def generate_tracking_number():
     Generates a prototype tracking number.
     In a real system, this would likely come from a dedicated parcel/label service.
     """
+    # Format: <Prefix><2 digits><Letter><12 digits> = 16 characters
+    # Prefix can be T, H or C (matches EVRi-like format)
+    prefix = secrets.choice("THC")
+    two_digits = "".join(secrets.choice(string.digits) for _ in range(2))
+    letter = secrets.choice(string.ascii_uppercase)
+    rest_digits = "".join(secrets.choice(string.digits) for _ in range(12))
 
-    random_part = "".join(secrets.choice(string.digits) for _ in range(15))
-    return f"H{random_part}"
+    return f"{prefix}{two_digits}{letter}{rest_digits}"
 
 def add_system_comment(enquiry_id, comment_text):
     """
     Adds a system comment to an enquiry, for example when the enquiry is created or updated.
     """
-
+    now = datetime.now(timezone.utc)
     system_comment = EnquiryComment(
         enquiry_id=enquiry_id,
         user_id=1,
         comment=comment_text,
-        created_at=datetime.now(timezone.utc),
+        created_at=now,
     )
     db.session.add(system_comment)
 

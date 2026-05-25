@@ -23,7 +23,7 @@ def login():
             return redirect(url_for("auth.login"))
 
         if not user.is_active:
-            flash("This account is inactive. Please contact an administrator.", "error")
+            flash("This account has not been activated. Please contact an administrator.", "error")
             return redirect(url_for("auth.login"))
 
         session["user_id"] = user.id

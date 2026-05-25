@@ -47,6 +47,11 @@ def validate(value, field_name, rules, context=None):
 
             if value and len(value) < min_length:
                 errors.append(f"The {field_name} field must be at least {min_length} characters.")
+        
+        elif rule.startswith("match_length:"):
+            match_length = int(rule.split(":")[1])
+            if value and len(value) != match_length:
+                errors.append(f"The {field_name} field must be exactly {match_length} characters.")
 
         elif rule == "email":
             if value and not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", value):

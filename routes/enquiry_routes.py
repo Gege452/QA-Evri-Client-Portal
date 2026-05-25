@@ -103,7 +103,7 @@ def new_client_enquiry():
         errors = []
 
         errors.extend(validate(category, "Category", ["required", "enquiry_category"]))
-        errors.extend(validate(tracking_number, "Tracking number", ["required_if_parcel"], context={"category": category}))
+        errors.extend(validate(tracking_number, "Tracking number", ["required_if_parcel", "match_length:16"], context={"category": category}))
         errors.extend(validate(subject, "Subject", ["required"]))
         errors.extend(validate(message, "Message", ["required"]))
 
@@ -249,7 +249,7 @@ def admin_view_enquiry(enquiry_id):
             errors = []
 
             errors.extend(validate(category, "Category", ["required", "enquiry_category"]))
-            errors.extend(validate(tracking_number, "Tracking number", ["required_if_parcel"], context={"category": category}))
+            errors.extend(validate(tracking_number, "Tracking number", ["required_if_parcel", "match_length:16"], context={"category": category}))
             errors.extend(validate(subject, "Subject", ["required"]))
             errors.extend(validate(message, "Message", ["required"]))
             errors.extend(validate(status, "Status", ["required", "enquiry_status"]))

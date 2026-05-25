@@ -357,6 +357,13 @@ def admin_view_client(client_id):
             if primary_user:
                 update_user(primary_user, email=new_email)
 
+        if status != "Active":
+            for linked_user in linked_users:
+                update_user(linked_user, is_active=False)
+        else:            
+            for linked_user in linked_users:
+                update_user(linked_user, is_active=True)
+
         if new_phone_number:
             update_client(client, phone_number=new_phone_number)
 
