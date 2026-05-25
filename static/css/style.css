@@ -1,3 +1,50 @@
+/* 
+    ==========================================================================
+   
+    *************************************************************************
+    *                                                                       *
+    *     E V R I   C L I E N T   P O R T A L   S T Y L E S H E E T       *
+    *                                                                       *
+    *************************************************************************
+
+    This stylesheet defines the visual design and layout for the Evri Client Portal.
+    It includes styles for all pages and components, ensuring a consistent and user-friendly interface.
+
+    The stylesheet is organized into sections based on different areas of the portal, such as:
+    
+        1. GLOBAL DESIGN AND LAYOUT STYLES
+        2. PORTAL-WIDE STYLES
+        3. TOP BAR, BRAND HEADER AND NAVIGATION
+        4. TABLES, BUTTONS AND OTHER REUSABLE COMPONENTS
+            4.1 BUTTONS
+            4.2 TABLES AND RELATED COMPONENTS
+            4.3 REUSABLE COMPONENTS
+            4.4 STATUS BADGES
+        5. LOGIN, LOGOUT, RESET PASSWORD PAGES
+        6. HOME PAGE
+        7. ENQUIRIES
+            7.1 FORMS
+            7.2 COMMENTS
+        8. CREATE CLIENT WIZARD
+            8.1 CREATE CLIENT WIZARD
+            8.2 CREATE CLIENT SUMMARY
+        9. ACCOUNT PAGES
+        10. CREATE PARCEL PAGE
+        11. PARCEL DETAIL PAGE
+
+    Each section is clearly marked with comments for easy navigation and maintenance.
+
+    ==========================================================================
+*/
+
+/* 
+
+   ==========================================================================
+   1. GLOBAL DESIGN AND LAYOUT STYLES
+   ==========================================================================
+
+*/
+
 * {
     box-sizing: border-box;
 }
@@ -9,77 +56,129 @@ body {
     background-color: #ffffff;
 }
 
-.login-body {
-    min-height: 100vh;
-    background-color: #4a4a4a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* 
+
+   ==========================================================================
+   2. PORTAL-WIDE STYLES
+   ==========================================================================
+
+*/
+
+.content {
+    flex: 1;
+    padding: 45px 70px;
 }
 
-.login-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+.content h1 {
+    font-size: 54px;
+    margin: 0 0 20px 0;
+    font-weight: normal;
 }
 
-.login-card {
-    width: 380px;
-    background-color: #ffffff;
-    border: 1px solid #111111;
-}
-
-.login-logo {
-    background-color: #1d3557;
-    color: white;
-    font-size: 22px;
-    text-align: center;
-    padding: 30px 20px;
-}
-
-.login-form {
-    padding: 30px;
-}
-
-.input-row {
-    display: flex;
-    margin-bottom: 24px;
-    border: 1px solid #777777;
-}
-
-.input-icon {
-    width: 64px;
-    background-color: #d9d9d9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    border-right: 1px solid #777777;
-}
-
-.input-row input {
-    width: 100%;
+hr {
     border: none;
-    padding: 18px;
-    font-size: 16px;
+    border-top: 3px solid #b3b3b3;
+    margin-bottom: 30px;
+}
+
+.section-heading {
+    font-size: 38px;
+    color: #1d3557;
+    margin: 0 0 24px 0;
+}
+
+.alert {
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border: 1px solid #333333;
+}
+
+.alert-success {
+    background-color: #1f9a75;
+    color: white;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+
+.portal-button {
+    background-color: #0886c7;
+    color: white;
+    border: 2px solid #1d3557;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.portal-button strong {
+    display: block;
+    font-size: 24px;
+}
+
+.portal-button span {
+    display: block;
+    font-size: 14px;
+}
+
+.portal-button:hover {
+    background-color: #0674ad;
+}
+
+.breadcrumb {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.breadcrumb a {
+    color: #0070c0;
+    text-decoration: none;
+}
+
+.page-divider {
+    border: none;
+    border-top: 3px solid #b3b3b3;
+    margin: 12px 0 28px 0;
+}
+
+.page-title {
+    font-size: 54px;
+    margin: 0 0 18px 0;
     color: #1d3557;
 }
 
-.login-button {
-    width: calc(100% + 60px);
-    margin-left: -30px;
-    margin-bottom: -30px;
-    border: none;
-    background-color: #0886c7;
-    color: white;
-    font-size: 28px;
-    padding: 30px;
-    cursor: pointer;
+.page-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.login-button:hover {
-    background-color: #0674ad;
+.notification-wrapper {
+    position: relative;
 }
+
+.notification-dot {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 12px;
+    height: 12px;
+    background-color: #e60000;
+    border-radius: 50%;
+    border: 1px solid white;
+}
+
+/* 
+
+   ==========================================================================
+   3. TOP BAR, BRAND HEADER AND NAVIGATION
+   ==========================================================================
+
+*/
 
 .top-bar {
     height: 46px;
@@ -140,176 +239,24 @@ body {
     padding-right: 10px;
 }
 
-.content {
-    flex: 1;
-    padding: 45px 70px;
-}
-
-.content h1 {
-    font-size: 54px;
-    margin: 0 0 20px 0;
-    font-weight: normal;
-}
-
-hr {
-    border: none;
-    border-top: 3px solid #b3b3b3;
-    margin-bottom: 30px;
-}
-
-.info-card {
-    border: 1px solid #777777;
-    padding: 18px 24px;
-    margin-bottom: 28px;
-}
-
-.info-card p {
-    margin: 0;
-    font-size: 18px;
-}
-
-.highlight-name {
-    color: #0070c0;
-}
-
-.action-panel {
-    border: 1px solid #777777;
-    padding: 25px 35px 45px 35px;
-}
-
-.action-panel h2 {
-    font-size: 36px;
-    font-weight: normal;
-    margin-top: 0;
-}
-
-.button-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-.button-grid-single-line {
-    display: grid;
-}
-
-.portal-button {
-    background-color: #0886c7;
-    color: white;
-    border: 2px solid #1d3557;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.portal-button strong {
-    display: block;
-    font-size: 24px;
-}
-
-.portal-button span {
-    display: block;
-    font-size: 14px;
-}
-
-.portal-button:hover {
-    background-color: #0674ad;
-}
-
-.alert {
-    padding: 14px 18px;
-    margin-bottom: 20px;
-    border: 1px solid #333333;
-}
-
-.alert-success {
-    background-color: #1f9a75;
-    color: white;
-}
-
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES *//* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-/* ENQUIRIES */
-
 .selected-nav-item {
     color: #0886c7;
 }
 
-.breadcrumb {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 12px;
-}
 
-.breadcrumb a {
-    color: #0070c0;
-    text-decoration: none;
-}
+/* 
 
-.page-divider {
-    border: none;
-    border-top: 3px solid #b3b3b3;
-    margin: 12px 0 28px 0;
-}
+   ==========================================================================
+   4. BUTTONS, TABLES AND OTHER REUSABLE COMPONENTS, STATUS BADGES
+   ==========================================================================
 
-.page-title {
-    font-size: 54px;
-    margin: 0 0 18px 0;
-    color: #1d3557;
-}
+*/
 
-.page-form {
-    width: 100%;
-}
-
-.form-row {
-    margin-bottom: 18px;
-}
-
-.form-row label {
-    display: block;
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 7px;
-    color: #1d3557;
-}
-
-.form-row input,
-.form-row select,
-.form-row textarea {
-    width: 100%;
-    border: 1px solid #bfbfbf;
-    border-radius: 5px;
-    padding: 8px 10px;
-    font-size: 16px;
-    color: #1d3557;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.form-row textarea {
-    min-height: 90px;
-    resize: vertical;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 28px;
-}
+/*
+    ===========================================================================
+        4.1 BUTTONS
+    ===========================================================================
+*/
 
 .btn-primary,
 .btn-secondary {
@@ -335,22 +282,6 @@ hr {
     border: 2px solid #1d3557;
 }
 
-/* 
-
-
-
-
-
-
-*/
-
-
-.page-heading-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .small-primary-button {
     background-color: #0886c7;
     color: white;
@@ -360,6 +291,50 @@ hr {
     font-weight: bold;
     text-decoration: none;
 }
+
+
+.small-secondary-button {
+    background-color: #ffffff;
+    color: #1d3557;
+    border: 2px solid #1d3557;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.view-button {
+    position: relative;
+    display: inline-block;
+    background-color: #ffffff;
+    color: #1d3557;
+    border: 1px solid #1d3557;
+    border-radius: 4px;
+    padding: 7px 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.delete-comment-button {
+    background-color: #ff3333;
+    color: white;
+    border: 1px solid #b30000;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete-comment-button:hover {
+    background-color: #d90000;
+}
+
+/*
+    ===========================================================================
+        4.2 TABLES AND RELATED COMPONENTS
+    ===========================================================================
+*/
 
 .search-form {
     margin-bottom: 18px;
@@ -426,6 +401,69 @@ hr {
     background-color: #f5f5f5;
 }
 
+/*
+    ===========================================================================
+        4.3 REUSABLE COMPONENTS
+    ===========================================================================
+*/
+
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 62px;
+    height: 34px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #c8d2d8;
+    transition: 0.2s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    width: 26px;
+    height: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.2s;
+    border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+    background-color: #1f9a75;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(28px);
+}
+
+.toggle-text {
+    font-size: 18px;
+    color: #1d3557;
+}
+
+/*
+    ===========================================================================
+        4.4 STATUS BADGES
+    ===========================================================================
+*/
+
 .status-badge {
     display: inline-block;
     min-width: 90px;
@@ -464,33 +502,6 @@ hr {
     background-color: #ff8c00;
 }
 
-.view-button {
-    position: relative;
-    display: inline-block;
-    background-color: #ffffff;
-    color: #1d3557;
-    border: 1px solid #1d3557;
-    border-radius: 4px;
-    padding: 7px 14px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.notification-wrapper {
-    position: relative;
-}
-
-.notification-dot {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 12px;
-    height: 12px;
-    background-color: #e60000;
-    border-radius: 50%;
-    border: 1px solid white;
-}
-
 .empty-table-message {
     text-align: center;
     font-weight: bold;
@@ -499,16 +510,156 @@ hr {
 
 /* 
 
-
-
-
-
-
-
-
-
+   ==========================================================================
+   5. LOGIN, LOGOUT, RESET PASSWORD PAGES
+   ==========================================================================
 
 */
+
+.login-body {
+    min-height: 100vh;
+    background-color: #4a4a4a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.login-card {
+    width: 380px;
+    background-color: #ffffff;
+    border: 1px solid #111111;
+}
+
+.login-logo {
+    background-color: #1d3557;
+    color: white;
+    font-size: 22px;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.login-form {
+    padding: 30px;
+}
+
+.login-button {
+    width: calc(100% + 60px);
+    margin-left: -30px;
+    margin-bottom: -30px;
+    border: none;
+    background-color: #0886c7;
+    color: white;
+    font-size: 28px;
+    padding: 30px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #0674ad;
+}
+
+.input-row {
+    display: flex;
+    margin-bottom: 24px;
+    border: 1px solid #777777;
+}
+
+.input-icon {
+    width: 64px;
+    background-color: #d9d9d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    border-right: 1px solid #777777;
+}
+
+.input-row input {
+    width: 100%;
+    border: none;
+    padding: 18px;
+    font-size: 16px;
+    color: #1d3557;
+}
+
+.button-grid-single-line {
+    display: grid;
+}
+
+.password-rules {
+    font-size: 13px;
+    color: #1d3557;
+    background-color: #f2f2f2;
+    border: 1px solid #c8c8c8;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+/* 
+    ==========================================================================
+    6. HOME PAGE
+    ==========================================================================
+*/
+
+.info-card {
+    border: 1px solid #777777;
+    padding: 18px 24px;
+    margin-bottom: 28px;
+}
+
+.info-card p {
+    margin: 0;
+    font-size: 18px;
+}
+
+.highlight-name {
+    color: #0070c0;
+}
+
+.action-panel {
+    border: 1px solid #777777;
+    padding: 25px 35px 45px 35px;
+}
+
+.action-panel h2 {
+    font-size: 36px;
+    font-weight: normal;
+    margin-top: 0;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+
+
+/*
+    ==========================================================================
+    7. ENQUIRIES
+    ==========================================================================
+*/
+
+/*
+    ===========================================================================
+        7.1 FORMS
+    ===========================================================================
+*/
+.page-form {
+    width: 100%;
+}
 
 .enquiry-title-row {
     display: flex;
@@ -516,12 +667,41 @@ hr {
     align-items: center;
 }
 
-.enquiry-detail-box,
-.comments-box {
-    border: 1px solid #777777;
-    padding: 18px;
-    margin-bottom: 22px;
+.form-row {
+    margin-bottom: 18px;
 }
+
+.form-row label {
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 7px;
+    color: #1d3557;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 16px;
+    color: #1d3557;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-row textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+
 
 .readonly-row {
     display: grid;
@@ -552,6 +732,60 @@ hr {
     resize: vertical;
 }
 
+.status-update-form,
+.close-form {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    align-items: center;
+}
+
+.status-update-form label {
+    font-weight: bold;
+}
+
+.status-update-form select {
+    padding: 8px;
+    border: 1px solid #777777;
+}
+
+.readonly-row select {
+    width: 100%;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    padding: 8px;
+    color: #1d3557;
+    background-color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin-ticket-actions {
+    display: flex;
+    justify-content: space-between;
+       align-items: center;
+    margin-top: 16px;
+}
+
+.readonly-row input[readonly],
+.readonly-row textarea[readonly] {
+    cursor: default;
+    background-color: #f8f8f8;
+}
+
+/*
+    ===========================================================================
+        7.2 COMMENTS
+    ===========================================================================
+*/
+
+.enquiry-detail-box,
+.comments-box {
+    border: 1px solid #777777;
+    padding: 18px;
+    margin-bottom: 22px;
+}
+
 .comment-input-row {
     display: grid;
     grid-template-columns: 140px 1fr;
@@ -576,35 +810,6 @@ hr {
     display: flex;
     justify-content: flex-end;
     margin-top: 12px;
-}
-
-.status-update-form,
-.close-form {
-    margin-top: 14px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    align-items: center;
-}
-
-.status-update-form label {
-    font-weight: bold;
-}
-
-.status-update-form select {
-    padding: 8px;
-    border: 1px solid #777777;
-}
-
-.small-secondary-button {
-    background-color: #ffffff;
-    color: #1d3557;
-    border: 2px solid #1d3557;
-    border-radius: 6px;
-    padding: 10px 18px;
-    font-weight: bold;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 .comment-list {
@@ -652,40 +857,25 @@ hr {
     color: #1d3557;
 }
 
-.readonly-row select {
-    width: 100%;
-    border: 1px solid #c8c8c8;
-    border-radius: 5px;
-    padding: 8px;
-    color: #1d3557;
-    background-color: #ffffff;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.admin-ticket-actions {
+.comment-card-header {
     display: flex;
     justify-content: space-between;
-       align-items: center;
-    margin-top: 16px;
+    align-items: center;
+    gap: 16px;
 }
 
-.readonly-row input[readonly],
-.readonly-row textarea[readonly] {
-    cursor: default;
-    background-color: #f8f8f8;
-}
+
 
 /* 
+    =======================================================================
+    8. CREATE CLIENT WIZARD & SUMMARY
+    =======================================================================
+*/
 
-
-
-
-
-
-
-
-
-
+/*
+    ===========================================================================
+        8.1 CREATE CLIENT WIZARD
+    ===========================================================================
 */
 .client-wizard-layout {
     display: grid;
@@ -791,64 +981,6 @@ hr {
     margin-top: 70px;
 }
 
-.toggle-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 62px;
-    height: 34px;
-}
-
-.switch input {
-    display: none;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    inset: 0;
-    background-color: #c8d2d8;
-    transition: 0.2s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    width: 26px;
-    height: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.2s;
-    border-radius: 50%;
-}
-
-.switch input:checked + .slider {
-    background-color: #1f9a75;
-}
-
-.switch input:checked + .slider:before {
-    transform: translateX(28px);
-}
-
-.toggle-text {
-    font-size: 18px;
-    color: #1d3557;
-}
-
-.confirm-summary-grid,
-.default-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    margin-bottom: 30px;
-}
 
 .confirm-item strong {
     display: block;
@@ -881,6 +1013,12 @@ hr {
     text-align: right;
 }
 
+/*
+    ===========================================================================
+        8.2 CREATE CLIENT SUMMARY
+    ===========================================================================
+*/
+
 .default-login-row {
     display: grid;
     grid-template-columns: 220px 1fr;
@@ -908,15 +1046,21 @@ hr {
     margin-top: 30px;
 }
 
-.password-display-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.confirm-summary-grid,
+.default-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
 }
 
-.password-display-row input {
-    flex: 1;
-}
+
+/*
+    ==========================================================================
+    9. ACCOUNT PAGES
+    ==========================================================================
+*/
+
 
 .account-summary-row {
     display: grid;
@@ -948,12 +1092,6 @@ hr {
 .account-reset-button {
     min-width: 160px;
     padding: 14px 20px;
-}
-
-.section-heading {
-    font-size: 38px;
-    color: #1d3557;
-    margin: 0 0 24px 0;
 }
 
 .account-form {
@@ -1010,7 +1148,33 @@ hr {
     margin-top: 0;
 }
 
+.view-client-form {
+    width: 100%;
+}
 
+.view-client-actions {
+    display: grid;
+    grid-template-columns: 180px 260px 140px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 55px;
+}
+
+.account-form-row select {
+    width: 100%;
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
+    padding: 9px 10px;
+    font-size: 16px;
+    color: #1d3557;
+}
+
+
+/*
+    ==========================================================================
+    10. CREATE PARCEL PAGE
+    ==========================================================================
+*/
 
 .parcel-form {
     width: 100%;
@@ -1111,11 +1275,11 @@ hr {
     margin-top: 20px;
 }
 
-
-
-
-
-
+/*
+    ==========================================================================
+    11. PARCEL DETAIL PAGE
+    ==========================================================================
+*/
 
 .parcel-detail-box {
     border: 1px solid #777777;
@@ -1162,67 +1326,6 @@ hr {
 .status-stop-and-return {
     background-color: #a6a6a6;
 }
-
-
-.password-rules {
-    font-size: 13px;
-    color: #1d3557;
-    background-color: #f2f2f2;
-    border: 1px solid #c8c8c8;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
-
-
-
-
-
-
-
-.view-client-form {
-    width: 100%;
-}
-
-.view-client-actions {
-    display: grid;
-    grid-template-columns: 180px 260px 140px;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 55px;
-}
-
-.account-form-row select {
-    width: 100%;
-    border: 1px solid #bfbfbf;
-    border-radius: 5px;
-    padding: 9px 10px;
-    font-size: 16px;
-    color: #1d3557;
-}
-
-.comment-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-}
-
-.delete-comment-button {
-    background-color: #ff3333;
-    color: white;
-    border: 1px solid #b30000;
-    border-radius: 5px;
-    padding: 6px 12px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.delete-comment-button:hover {
-    background-color: #d90000;
-}
-
-
 
 .add-track-event-box {
     border: 1px solid #777777;
