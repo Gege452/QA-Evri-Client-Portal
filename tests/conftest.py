@@ -9,7 +9,7 @@ from routes.admin_routes import admin_bp
 from routes.client_routes import client_bp
 from routes.enquiry_routes import enquiry_bp
 from routes.parcel_routes import parcel_bp
-from models import Client, User, Parcel, TrackEvent, Enquiry, EnquiryComment
+from models import Client, User
 
 
 @pytest.fixture
