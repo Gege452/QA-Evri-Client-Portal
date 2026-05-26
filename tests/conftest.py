@@ -1,7 +1,11 @@
 import os
+import sys
 import pytest
 from flask import Flask, redirect, url_for
 from werkzeug.security import generate_password_hash
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, project_root)
 
 from extensions import db
 from routes.auth_routes import auth_bp
