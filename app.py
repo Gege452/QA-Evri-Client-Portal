@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for
 import os
 
-from extensions import db, csrf
+from extensions import db, csrf, limiter
 from seed import create_database_and_seed_users
 from flask_wtf.csrf import generate_csrf
 
@@ -23,6 +23,7 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     csrf.init_app(app)
+    limiter.init_app(app)
     app.jinja_env.globals["csrf_token"] = generate_csrf
 
     # Register blueprints

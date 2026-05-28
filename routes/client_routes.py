@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from datetime import datetime, timezone
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
 
 from auth_utils import role_required
-from extensions import db
+from extensions import db, limiter
 from models import User, Client
 from helpers import update_client, update_user
 from validators import validate, validate_new_email, validate_new_phone_number
@@ -22,6 +21,7 @@ def client_home():
 
 
 @client_bp.route("/client/account", methods=["GET", "POST"])
+@limiter.limit("5 per minute", methods=["POST"])
 @role_required("client")
 def client_account():
     """
@@ -72,8 +72,11 @@ def client_account():
                 flash(error, "error")
             return redirect(url_for("client.client_account"))
 
-        now = datetime.now(timezone.utc)
-
+        current_app.logger.info(
+            "Client User (ID: %s) is updating client (ID: %s) information.",
+            user.id,
+            client.id,
+        )
          # Update the client record with the new information. Only fields that have been filled out will be updated, thanks to the use of optional keyword arguments in the update_client function.
         update_client(
             client,address_line_1=address_line_1,

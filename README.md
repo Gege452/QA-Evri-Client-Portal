@@ -196,13 +196,13 @@ The project includes GitHub Actions workflow (`.github/workflows/test.yml`):
 - ✅ **SQL Injection Protection**: SQLAlchemy ORM parameterization
 - ✅ **CSRF Protection**: Implemented via Flask-WTF CSRFProtect and hidden form tokens
 - ✅ **Dependency Management**: Pinned versions with vulnerability scanning
+- ✅ **Rate Limiting**: Flask-Limiter applied to all POST endpoints (5–20 per minute per route)
+- ✅ **Audit Logging**: Sensitive operations (e.g., account updates) logged via `current_app.logger.info()`
 
 ### Recommendations
 
 - 🔧 **HTTPS**: Enable SSL/TLS in production
 - 🔧 **CORS**: Configure if exposing APIs to external clients
-- 🔧 **Rate Limiting**: Add request rate limiting for login endpoints
-- 🔧 **Logging**: Implement audit logging for sensitive operations
 - 🔧 **Secrets**: Use environment variables for `SECRET_KEY` and `DATABASE_URI` in production
 
 ---

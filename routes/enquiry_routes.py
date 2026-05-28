@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
 from datetime import datetime, timezone
 
 from auth_utils import role_required
-from extensions import db
+from extensions import db, limiter
 from models import Enquiry, EnquiryComment, Client, User
 from config import ENQUIRY_CATEGORIES
 from helpers import add_system_comment, create_enquiry_comment_object, create_enquiry_object, enquiry_requires_attention, format_enquiry_number, update_enquiry, build_enquiry_change_comment
@@ -104,6 +104,7 @@ def admin_enquiries():
     )
 
 @enquiry_bp.route("/client/enquiry/new", methods=["GET", "POST"])
+@limiter.limit("10 per minute", methods=["POST"])
 @role_required("client")
 def new_client_enquiry():
     if request.method == "POST":
@@ -133,8 +134,6 @@ def new_client_enquiry():
                 email=session.get("email"),
             )
 
-        now = datetime.now(timezone.utc)
-
         enquiry = create_enquiry_object(session["user_id"], category, subject, message, tracking_number=(tracking_number if tracking_number else None))
 
         db.session.add(enquiry)
@@ -144,6 +143,12 @@ def new_client_enquiry():
 
         db.session.add(system_comment)
         db.session.commit()
+
+        current_app.logger.info(
+            "Client User (ID: %s) created enquiry (ID: %s).",
+            session["user_id"],
+            enquiry.id
+        )
 
         flash(f"Enquiry ENQ{enquiry.id:06d} has been created successfully.", "success")
         return redirect(url_for("client.client_home"))
@@ -161,6 +166,7 @@ def new_client_enquiry():
 
 
 @enquiry_bp.route("/client/enquiry/<int:enquiry_id>", methods=["GET", "POST"])
+@limiter.limit("10 per minute", methods=["POST"])
 @role_required("client")
 def client_view_enquiry(enquiry_id):
     enquiry = Enquiry.query.get_or_404(enquiry_id)
@@ -199,6 +205,12 @@ def client_view_enquiry(enquiry_id):
             db.session.add(comment)
             db.session.commit()
 
+            current_app.logger.info(
+                "Client User (ID: %s) added a comment to enquiry (ID: %s).",
+                session["user_id"],
+                enquiry.id
+            )
+
             flash("Comment added successfully.", "success")
             return redirect(url_for("enquiry.client_view_enquiry", enquiry_id=enquiry.id))
 
@@ -215,6 +227,12 @@ def client_view_enquiry(enquiry_id):
             )
 
             db.session.commit()
+
+            current_app.logger.info(
+                "Client User (ID: %s) closed enquiry (ID: %s).",
+                session["user_id"],
+                enquiry.id
+            )
 
             flash("Enquiry closed successfully.", "success")
             return redirect(url_for("enquiry.client_view_enquiry", enquiry_id=enquiry.id))
@@ -241,6 +259,7 @@ def client_view_enquiry(enquiry_id):
     
 
 @enquiry_bp.route("/admin/enquiry/<int:enquiry_id>", methods=["GET", "POST"])
+@limiter.limit("10 per minute", methods=["POST"])
 @role_required("admin")
 def admin_view_enquiry(enquiry_id):
     enquiry = Enquiry.query.get_or_404(enquiry_id)
@@ -296,6 +315,12 @@ def admin_view_enquiry(enquiry_id):
 
             db.session.commit()
 
+            current_app.logger.info(
+                "Admin User (ID: %s) updated enquiry (ID: %s).",
+                session["user_id"],
+                enquiry.id,
+            )
+
             flash("Enquiry updated successfully.", "success")
             return redirect(url_for("enquiry.admin_view_enquiry", enquiry_id=enquiry.id))
 
@@ -350,6 +375,7 @@ def admin_view_enquiry(enquiry_id):
     )
 
 @enquiry_bp.route("/admin/enquiry/<int:enquiry_id>/comment/<int:comment_id>/delete", methods=["POST"])
+@limiter.limit("10 per minute", methods=["POST"])
 @role_required("admin")
 def admin_delete_enquiry_comment(enquiry_id, comment_id):
     enquiry = Enquiry.query.get_or_404(enquiry_id)
@@ -364,6 +390,13 @@ def admin_delete_enquiry_comment(enquiry_id, comment_id):
         flash("System comments cannot be deleted.", "error")
         return redirect(url_for("enquiry.admin_view_enquiry", enquiry_id=enquiry.id))
 
+    current_app.logger.info(
+        "Admin User (ID: %s) deleted a comment (ID: %s) from enquiry (ID: %s).",
+        session["user_id"],
+        comment.id,
+        enquiry.id,
+    )
+    
     db.session.delete(comment)
 
     enquiry.updated_at = datetime.now(timezone.utc)

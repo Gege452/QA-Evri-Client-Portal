@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
 from datetime import datetime, timezone
 
 from auth_utils import login_required, role_required
-from extensions import db
+from extensions import db, limiter
 from models import User, Client, Parcel, TrackEvent
 from config import PARCEL_SIZES, DELIVERY_SPEEDS
 from helpers import can_user_stop_and_return, create_parcel_object, generate_tracking_number, create_initial_track_event
@@ -10,6 +10,7 @@ from validators import validate
 parcel_bp = Blueprint("parcel", __name__)
 
 @parcel_bp.route("/client/parcel/create", methods=["GET", "POST"])
+@limiter.limit("20 per minute", methods=["POST"])
 @role_required("client")
 def client_create_parcel():
     user = User.query.get_or_404(session["user_id"])
@@ -85,6 +86,13 @@ def client_create_parcel():
         create_initial_track_event(parcel)
 
         db.session.commit()
+
+        current_app.logger.info(
+            "Client user (ID: %s) created parcel (ID: %s, Tracking number: %s).",
+            user.id,
+            parcel.id,
+            parcel.tracking_number,
+        )
 
         flash(f"Parcel {tracking_number} has been created successfully.", "success")
         return redirect(url_for("parcel.client_create_parcel"))
@@ -227,6 +235,7 @@ def client_view_parcel(parcel_id):
 
 
 @parcel_bp.route("/admin/parcel/<int:parcel_id>", methods=["GET", "POST"])
+@limiter.limit("20 per minute", methods=["POST"])
 @role_required("admin")
 def admin_view_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
@@ -283,6 +292,14 @@ def admin_view_parcel(parcel_id):
         db.session.add(track_event)
         db.session.commit()
 
+        current_app.logger.info(
+            "Admin user (ID: %s) added tracking event (ID: %s, Status: %s) for parcel (ID: %s).",
+            session["user_id"],
+            track_event.id,
+            track_event.event_status,
+            parcel.id
+        )
+
         flash("Tracking event added successfully.", "success")
         return redirect(url_for("parcel.admin_view_parcel", parcel_id=parcel.id))
 
@@ -308,6 +325,7 @@ def admin_view_parcel(parcel_id):
     )
 
 @parcel_bp.route("/parcel/<int:parcel_id>/stop-return", methods=["POST"])
+@limiter.limit("20 per minute", methods=["POST"])
 @login_required
 def stop_and_return_parcel(parcel_id):
     user = User.query.get_or_404(session["user_id"])
@@ -339,6 +357,12 @@ def stop_and_return_parcel(parcel_id):
 
     db.session.add(stop_return_event)
     db.session.commit()
+
+    current_app.logger.info(
+        "User (ID: %s) applied Stop and Return to parcel (ID: %s).",
+        session["user_id"],
+        parcel.id
+    )
 
     flash("Stop and Return has been applied to this parcel.", "success")
 

@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
 from werkzeug.security import generate_password_hash
 
 from auth_utils import role_required
-from extensions import db
+from extensions import db, limiter
 from models import User, Client
 from helpers import build_client_onboarding_mailto, create_client_user_object, get_new_client_session_data, handle_step_errors, save_new_client_session_data, generate_temporary_password, create_client_object, update_client, update_user
 from validators import is_client_name_taken, is_client_short_name_taken, validate, is_email_taken, validate_new_email, validate_new_phone_number
@@ -64,6 +64,7 @@ def admin_clients():
 
 
 @admin_bp.route("/admin/client/create", methods=["GET", "POST"])
+@limiter.limit("10 per minute", methods=["POST"])
 @role_required("admin")
 def admin_create_client():
     """
@@ -273,6 +274,13 @@ def admin_create_client():
             session.pop("new_client", None)
             session.modified = True
 
+            current_app.logger.info(
+                "Admin user (ID: %s) created new client (ID: %s) and linked user (ID: %s).",
+                session.get("user_id"),
+                new_client.id,
+                new_client_user.id
+            )
+
             flash("Successfully created the client.", "success")
             return redirect(url_for("admin.admin_create_client", step=5))
 
@@ -290,6 +298,7 @@ def admin_create_client():
 
 @admin_bp.route("/admin/client/<int:client_id>", methods=["GET", "POST"])
 @role_required("admin")
+@limiter.limit("10 per minute", methods=["POST"])
 def admin_view_client(client_id):
     client = Client.query.get_or_404(client_id)
 
@@ -372,6 +381,12 @@ def admin_view_client(client_id):
 
         db.session.commit()
 
+        current_app.logger.info(
+            "Admin user (ID: %s) updated client (ID: %s) account details and linked users.",
+            session.get("user_id"),
+            client.id,
+        )
+
         flash("Client updated successfully.", "success")
         return redirect(url_for("admin.admin_view_client", client_id=client.id))
 
@@ -388,6 +403,7 @@ def admin_view_client(client_id):
 
 
 @admin_bp.route("/admin/account", methods=["GET", "POST"])
+@limiter.limit("5 per minute", methods=["POST"])
 @role_required("admin")
 def admin_account():
     user = User.query.get_or_404(session["user_id"])
@@ -406,11 +422,17 @@ def admin_account():
 
             return redirect(url_for("admin.admin_account"))
 
+        old_email = user.email
         update_user(user, email=new_email)
 
         db.session.commit()
 
-        session["email"] = user.email
+        current_app.logger.info(
+            "Admin user (ID: %s) updated own account details: email=%s -> %s",
+            session.get("user_id"),
+            old_email,
+            session.get("email")
+        )
 
         flash("Account email address updated successfully.", "success")
         return redirect(url_for("admin.admin_account"))

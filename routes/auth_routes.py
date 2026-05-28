@@ -1,16 +1,18 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
 
 from auth_utils import login_required
-from extensions import db
+from extensions import db, limiter
 from models import User
 from validators import validate_password_strength
 
 
 auth_bp = Blueprint("auth", __name__)
 
+
 @auth_bp.route("/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute", methods=["POST"])
 def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
@@ -31,8 +33,20 @@ def login():
         session["role"] = user.role
         session["display_name"] = user.display_name
 
+        current_app.logger.info(
+            "User (ID: %s, Role: %s) logged in successfully.",
+            user.id,
+            user.role,
+        )
+
         if user.must_reset_password:
             flash("You must reset your password before accessing the portal.", "error")
+
+            current_app.logger.info(
+                "User (ID: %s) is required to reset password upon login.",
+                user.id,
+            )
+
             return redirect(url_for("auth.reset_password"))
 
         flash("Successfully logged in.", "success")
@@ -47,11 +61,17 @@ def login():
 @auth_bp.route("/logout")
 @login_required
 def logout():
+    current_app.logger.info(
+        "User (ID: %s, Role: %s) logged out.",
+        session.get("user_id"),
+        session.get("role"),
+    )
     session.clear()
     flash("Successfully logged out.", "success")
     return render_template("logout.html")
 
 @auth_bp.route("/reset-password", methods=["GET", "POST"])
+@limiter.limit("5 per minute", methods=["POST"])
 @login_required
 def reset_password():
     user = User.query.get_or_404(session["user_id"])
@@ -91,6 +111,12 @@ def reset_password():
         db.session.commit()
 
         session.clear()
+
+        current_app.logger.info(
+            "User (ID: %s, Role: %s) reset their password successfully.",
+            user.id,
+            user.role,
+        )
 
         flash("Password reset successfully. Please log in with your new password.", "success")
         return redirect(url_for("auth.login"))
