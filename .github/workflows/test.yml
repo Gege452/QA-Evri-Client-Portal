@@ -27,7 +27,7 @@ jobs:
           run: pip install -r requirements.txt
 
         - name: Run application tests
-          run: pytest test/  -v
+          run: pytest tests/test_app.py -v
 
    owasp-security-tests:
     name: OWASP Security Tests
