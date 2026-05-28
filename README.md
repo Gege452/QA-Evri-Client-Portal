@@ -145,8 +145,8 @@ The application is built using **Flask**, a lightweight Python web framework, wi
 5. **Access the portal**:
    - Open browser to `http://localhost:5000`
    - Default login credentials (seeded):
-     - **Admin**: `admin@evri.com` / `adminpass`
-     - **Client**: `client@example.com` / `clientpass`
+     - **Admin**: `admin1@evri.com` / `AdminPass123!`
+     - **Client**: `user1@bcd.local` / `ClientPass123!` (Upon first login this will force you to reset the password)
 
 6. **Database**:
    - SQLite database is automatically created in `instance/evri_client_portal.db` on first run
@@ -198,12 +198,12 @@ The project includes GitHub Actions workflow (`.github/workflows/test.yml`):
 - ✅ **Dependency Management**: Pinned versions with vulnerability scanning
 - ✅ **Rate Limiting**: Flask-Limiter applied to all POST endpoints (5–20 per minute per route)
 - ✅ **Audit Logging**: Sensitive operations (e.g., account updates) logged via `current_app.logger.info()`
+- ✅ **Secrets**: Use environment variables for `SECRET_KEY` and `DATABASE_URI` in production
+- ✅ **HTTPS**: Enable SSL/TLS in production
 
-### Recommendations
-
-- 🔧 **HTTPS**: Enable SSL/TLS in production
-- 🔧 **CORS**: Configure if exposing APIs to external clients
-- 🔧 **Secrets**: Use environment variables for `SECRET_KEY` and `DATABASE_URI` in production
+### Plans
+- 🔧 **CORS**: Configure when exposing APIs to external clients
+- 🔧 **Multi-user**: Allow multiple users to be added to the same client.
 
 ---
 

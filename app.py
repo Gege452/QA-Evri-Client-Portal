@@ -16,8 +16,11 @@ def create_app():
     app = Flask(__name__)
 
     # Configuration
-    app.config["SECRET_KEY"] = "dev-secret-key-change-later"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///evri_client_portal.db"
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-later")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+        "DATABASE_URL",
+        "sqlite:///evri_client_portal.db"
+    )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # Initialize extensions
@@ -53,4 +56,8 @@ app = create_app()
 
 # Run the application
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=os.environ.get("FLASK_DEBUG") == "1"
+    )
