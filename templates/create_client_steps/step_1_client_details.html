@@ -1,6 +1,7 @@
 <h2 class="wizard-heading">Client Details</h2>
 
 <form method="POST" action="{{ url_for('admin.admin_create_client', step=1) }}" class="wizard-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="wizard-form-row">
         <label for="client_name">Client Name*</label>

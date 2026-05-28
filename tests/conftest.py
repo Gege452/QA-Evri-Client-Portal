@@ -7,7 +7,8 @@ from werkzeug.security import generate_password_hash
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
-from extensions import db
+from extensions import db, csrf
+from flask_wtf.csrf import generate_csrf
 from routes.auth_routes import auth_bp
 from routes.admin_routes import admin_bp
 from routes.client_routes import client_bp
@@ -24,8 +25,11 @@ def app():
     app.config["SECRET_KEY"] = "test-secret-key"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["WTF_CSRF_ENABLED"] = False
 
     db.init_app(app)
+    csrf.init_app(app)
+    app.jinja_env.globals["csrf_token"] = generate_csrf
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(client_bp)

@@ -55,7 +55,7 @@ def create_database_and_seed_users():
         email = f"admin{i}@evri.com"
         admin = User(
             email=email,
-            password_hash=generate_password_hash("adminpass"),
+            password_hash=generate_password_hash("AdminPass123!"),
             role="admin",
             display_name=_rand_name("Admin", i),
             must_reset_password=False,
@@ -148,7 +148,7 @@ def create_database_and_seed_users():
 
         user = User(
             email=f"user{i}@{short.lower()}.local",
-            password_hash=generate_password_hash("clientpass"),
+            password_hash=generate_password_hash("ClientPass123!"),
             role="client",
             display_name=client.client_name,
             client_id=client.id,

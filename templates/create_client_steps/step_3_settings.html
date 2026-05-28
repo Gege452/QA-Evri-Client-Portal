@@ -1,6 +1,7 @@
 <h2 class="wizard-heading">Settings</h2>
 
 <form method="POST" action="{{ url_for('admin.admin_create_client', step=3) }}" class="wizard-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="wizard-form-row">
         <label for="short_name">Short Name*</label>

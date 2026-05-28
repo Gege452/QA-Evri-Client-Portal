@@ -13,7 +13,7 @@
 <hr class="page-divider">
 
 <form method="POST" action="{{ url_for('admin.admin_view_client', client_id=client.id) }}" class="view-client-form">
-
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="action" value="save_client">
 
     <h2 class="section-heading">Details</h2>

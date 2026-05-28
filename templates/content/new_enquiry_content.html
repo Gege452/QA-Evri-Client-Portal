@@ -13,6 +13,7 @@
 <hr class="page-divider">
 
 <form method="POST" action="{{ url_for('enquiry.new_client_enquiry') }}" class="page-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="form-row">
         <label for="category">Enquiry category*</label>

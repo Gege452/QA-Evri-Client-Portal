@@ -57,6 +57,7 @@
     </section>
 
     <form method="POST" action="{{ url_for('client.client_account') }}" class="account-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <h2 class="section-heading">Email address</h2>
 
@@ -239,6 +240,7 @@
     <h2 class="section-heading">Email address</h2>
 
     <form method="POST" action="{{ url_for('admin.admin_account') }}" class="account-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <div class="account-form-row">
             <label for="current_email">Email address</label>

@@ -78,6 +78,7 @@
         <h2 class="section-heading">Add tracking event</h2>
 
         <form method="POST" action="{{ url_for('parcel.admin_view_parcel', parcel_id=parcel.id) }}" class="track-event-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="track-event-row">
                 <label for="event_status">Status*</label>

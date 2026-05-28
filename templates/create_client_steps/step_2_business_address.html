@@ -1,6 +1,7 @@
 <h2 class="wizard-heading">Business Address</h2>
 
 <form method="POST" action="{{ url_for('admin.admin_create_client', step=2) }}" class="wizard-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="wizard-form-row">
         <label for="address_line_1">Address line 1*</label>
